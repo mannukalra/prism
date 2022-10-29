@@ -1,0 +1,28 @@
+{
+  "name": "prism",
+  "version": "1.0.0",
+  "description": "Multiple sites from one App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mannukalra/prism"
+  },
+  "keywords": [
+    "pnbc",
+    "o2s"
+  ],
+  "author": "mannukalra",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mannukalra/prism/issues"
+  },
+  "homepage": "https://github.com/mannukalra/prism#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemailer": "^6.8.0"
+  }
+}
