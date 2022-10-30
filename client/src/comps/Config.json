@@ -1,0 +1,10 @@
+{
+    "o2s": {
+        "label": "O2S",
+        "img": "o2s.png"
+    },
+    "pnbc": {
+        "label": "P&BC",
+        "img": "pnbc.png"
+    }
+}
