@@ -3,15 +3,16 @@
 }
 
 .App-logo {
-  height: 21vmin;
+  height: 36vmin;
   pointer-events: none;
+  margin: 2rem;
 }
 
 .App-header {
   background-color: #002F6C;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -20,4 +21,8 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.Nav-items {
+  margin-left: 3rem;
 }

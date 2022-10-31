@@ -1,10 +1,12 @@
 {
     "o2s": {
         "label": "O2S",
-        "img": "o2s.png"
+        "appBarBGColor": "#002F6C",
+        "logo": "o2s-logo.png"
     },
     "pnbc": {
         "label": "P&BC",
-        "img": "pnbc.png"
+        "appBarBGColor": "#F7BF50",
+        "logo": "pnbc-logo.png"
     }
 }
