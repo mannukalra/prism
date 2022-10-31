@@ -2,11 +2,24 @@
     "o2s": {
         "label": "O2S",
         "appBarBGColor": "#002F6C",
-        "logo": "o2s-logo.png"
+        "logo": "o2s-logo.png",
+        "logoColor": "#F7BF50",
+        "tabs": [
+            {"name": "Home"},
+            {"name": "About Us"},
+            {"name": "Services"}
+        ]
     },
     "pnbc": {
         "label": "P&BC",
         "appBarBGColor": "#F7BF50",
-        "logo": "pnbc-logo.png"
+        "logo": "pnbc-logo.png",
+        "logoColor": "#82B04D",
+        "tabs": [
+            {"name": "Home"},
+            {"name": "About Us"},
+            {"name": "Services"},
+            {"name": "Locations"}
+        ]
     }
 }
