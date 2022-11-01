@@ -1,10 +1,10 @@
 import data from "./Config.json";
-import { AppBar, Box, Container, Tab, Tabs, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, Container, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useState } from 'react'
 
 
 function TabPanel(tabPanelProps) {
-    const { children, value, index, ...other } = tabPanelProps;
+    const { children, heading, bgImage, value, index, ...other } = tabPanelProps;
     
     return (
       <div
@@ -15,9 +15,30 @@ function TabPanel(tabPanelProps) {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3, bgcolor: "#E0E0E0", minHeight: '82vh'}}>
-            <Typography>{children}</Typography>
-          </Box>
+        //   <Box sx={{ p: 3, bgcolor: "#E0E0E0", minHeight: '82vh'}}>
+        //     <H1>{heading}</H1>
+        //     <Typography>{children}</Typography>
+        //   </Box>
+        <Card sx={{ minHeight: "88vh" }}>
+             <CardContent>
+             {bgImage &&   
+             <CardMedia
+                component="img"
+                height="720"
+                image={require("../img/"+bgImage)}
+                alt="green iguana"
+                />}
+                <Typography variant="h3" component="div">
+                    {children}
+                </Typography>
+                <Typography variant="body2">
+                    {heading}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small">Learn More</Button>
+            </CardActions>
+        </Card>
         )}
       </div>
     );
@@ -40,7 +61,7 @@ function tabsList(tabs){
 
 function tabsPanelList(tabs, selectedIndex){
     return tabs.map((tab, index) => (
-        <TabPanel value={selectedIndex} index={index}>{tab.name}</TabPanel>
+        <TabPanel heading={tab.name} bgImage={tab.bgImage} value={selectedIndex} index={index}>{tab.content}</TabPanel>
     ));
 }
 
