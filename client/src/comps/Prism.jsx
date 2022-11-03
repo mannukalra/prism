@@ -1,48 +1,7 @@
 import data from "./Config.json";
-import { AppBar, Box, Button, Card, CardActions, CardContent, CardMedia, Container, Tab, Tabs, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Container, Tab, Tabs, Tooltip } from "@mui/material";
 import { useState } from 'react'
-
-
-function TabPanel(tabPanelProps) {
-    const { children, heading, bgImage, value, index, ...other } = tabPanelProps;
-    
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`prism-tabpanel-${index}`}
-        aria-labelledby={`prism-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-        //   <Box sx={{ p: 3, bgcolor: "#E0E0E0", minHeight: '82vh'}}>
-        //     <H1>{heading}</H1>
-        //     <Typography>{children}</Typography>
-        //   </Box>
-        <Card sx={{ minHeight: "88vh" }}>
-             <CardContent>
-             {bgImage &&   
-             <CardMedia
-                component="img"
-                height="720"
-                image={require("../img/"+bgImage)}
-                alt="green iguana"
-                />}
-                <Typography variant="h3" component="div">
-                    {children}
-                </Typography>
-                <Typography variant="body2">
-                    {heading}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button size="small">Learn More</Button>
-            </CardActions>
-        </Card>
-        )}
-      </div>
-    );
-}
+import SwissComp from "./SwissComp";
 
 
 
@@ -55,13 +14,13 @@ function a11yProps(index) {
 
 function tabsList(tabs){
     return tabs.map((tab, index) => (
-        <Tab label={tab.name} {...a11yProps(index)} />
+        <Tab label={tab.name} key={index} {...a11yProps(index)} />
     ));
 }
 
 function tabsPanelList(tabs, selectedIndex){
     return tabs.map((tab, index) => (
-        <TabPanel heading={tab.name} bgImage={tab.bgImage} value={selectedIndex} index={index}>{tab.content}</TabPanel>
+        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} />
     ));
 }
 
