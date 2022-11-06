@@ -5,9 +5,13 @@
         "logo": "o2s-logo.png",
         "logoColor": "#F7BF50",
         "tabs": [
-            {"name": "Home"},
-            {"name": "About Us"},
-            {"name": "Services"}
+            {"name": "Home", "content": "Observability simplified!", 
+                "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
+                "to":["mkmandeepkalra@gmail.com"],
+                "cc": ["mannu.kalra29@gmail.com"]
+            },
+            {"name": "About Us", "content": "Wait for it.."},
+            {"name": "Services", "content": "Wait for it.."}
         ]
     },
     "pnbc": {
@@ -17,8 +21,8 @@
         "logoColor": "#82B04D",
         "tabs": [
             {"name": "Home", "content": "Light & Effective way to control pest!", 
-                "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us", "fontColor": "#82B04D",
-                "to": ["mkmandeepkalra@gmail.com"], "toact":["pestbugcontrol@gmail.com", "tarsem.tps@gmail.com"],
+                "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us",
+                "to":["pestbugcontrol@gmail.com", "tarsem.tps@gmail.com"],
                 "cc": ["mannu.kalra29@gmail.com"]
             },
             {"name": "About Us", "content": "Our quality oriented team is a group of dedicated professionals, which guarantees our services meet high-quality standards."},

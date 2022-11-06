@@ -1,4 +1,4 @@
-import {Button, Card, CardActions, CardContent, CardMedia, Typography, Paper, Grid } from "@mui/material";
+import {Button, Card, CardActions, CardContent, Typography, Paper, Grid } from "@mui/material";
 import FullImageCard from "./FullImageCard";
 
 
@@ -9,7 +9,7 @@ function listItems(list){
 }
 
 function SwissComp(props) {
-    const { tab, value, index, page, ...other } = props;
+    const { tab, value, index, page, logoColor, connectOpen, ...other } = props;
     
     return (
       <div
@@ -20,7 +20,7 @@ function SwissComp(props) {
         {...other}
       >
         {value === index && (
-            tab.bgImage ? <FullImageCard tab={tab} page={page} /> :
+            tab.bgImage ? <FullImageCard tab={tab} page={page} logoColor={logoColor} connectOpen={connectOpen}/> :
             <Card sx={{ minHeight: "88vh"}}>
                 <CardContent>
                     <Typography variant="h3" component="div">
@@ -36,13 +36,9 @@ function SwissComp(props) {
                             {listItems(tab.list)}
                         </Grid>
                     }
-
-                    <Typography variant="body2">
-                        {tab.name}
-                    </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
+                <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
+                    <Button size="large" sx={{color: logoColor}} onClick={props.navToHome}>Learn More</Button>
                 </CardActions>
             </Card>
         )}

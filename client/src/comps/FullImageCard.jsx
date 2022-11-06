@@ -4,7 +4,7 @@ import Connect from "./Connect";
 
 
 function FullImageCard(props){
-    const [connectOpen, setConnectOpen] = useState(false);
+    const [connectOpen, setConnectOpen] = useState(props.connectOpen);
     const handleOpenConnect = () => {
         setConnectOpen(true);
     };
@@ -22,14 +22,13 @@ function FullImageCard(props){
                 alt="green iguana"
                 sx={{position: "absolute", width: "100%", minHeight: "76vh" }}
             />
-            <CardContent sx={{position: "relative", backgroundColor: "transparent", 
-                color: props.tab.fontColor, backgroundColor: "rgba(0,0,0,.12)", minHeight: "56vh" }}>
-              <Typography variant="h3" fontWeight="720" component="p" sx={{ color: props.tab.fontColor }} >
+            <CardContent sx={{position: "relative", color: props.logoColor, backgroundColor: "rgba(0,0,0,.12)", minHeight: "56vh" }}>
+              <Typography variant="h3" fontWeight="720" component="p" sx={{ color: props.logoColor }} >
                 {props.tab.content}
               </Typography>
             </CardContent>
             <CardActions sx={{position: "relative", alignItems: "center", justifyContent: "center",
-                color: props.tab.fontColor, backgroundColor: "rgba(0,0,0,.12)" }}>
+                color: props.logoColor, backgroundColor: "rgba(0,0,0,.12)" }}>
               <Button size="xlarge" color="inherit" variant="outlined" onClick={handleOpenConnect}
                 sx={{marginBottom: "7rem", fontSize: '24px', borderWidth: "3px"}}>
                 {props.tab.connectText}
@@ -40,7 +39,8 @@ function FullImageCard(props){
                 open={connectOpen}
                 handleClose={handleCloseConnect}
                 tab={props.tab} 
-                page={props.page} />
+                page={props.page} 
+                logoColor={props.logoColor} />
             </CardActions>
         </Card>
     );

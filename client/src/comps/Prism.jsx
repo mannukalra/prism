@@ -18,9 +18,10 @@ function tabsList(tabs){
     ));
 }
 
-function tabsPanelList(tabs, selectedIndex, page){
+function tabsPanelList(tabs, selectedIndex, page, navToHome, logoColor, connectOpen){
     return tabs.map((tab, index) => (
-        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} page={page} />
+        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} page={page} 
+            navToHome={navToHome} logoColor={logoColor} connectOpen={connectOpen} />
     ));
 }
 
@@ -28,9 +29,16 @@ function Prism(props) {
 
     const config = data[props.page];
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [connectOpen, setConnectOpen] = useState(false);
     const handleChange = (event, newSelection) => {
+        setConnectOpen(false);
         setSelectedIndex(newSelection);
     };
+
+    const navToHome = () =>{
+        setConnectOpen(true);
+        setSelectedIndex(0);
+    }
 
     return (
         <Box>
@@ -51,16 +59,7 @@ function Prism(props) {
                     </Box>
                 </Container>
             </AppBar>
-            {/* <TabPanel value={value} index={0}>
-                Item One
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel> */}
-            {tabsPanelList(config.tabs, selectedIndex, props.page)}
+            {tabsPanelList(config.tabs, selectedIndex, props.page, navToHome, config.logoColor, connectOpen)}
         </Box>
     );
 }

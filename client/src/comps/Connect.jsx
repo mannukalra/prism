@@ -87,7 +87,7 @@ function Connect(props) {
                         rows={8} value={mailContent.query} onChange={handleChange} multiline />
                 </Box>
             </DialogContent>
-            <DialogActions sx={{color: props.tab.fontColor}}>
+            <DialogActions sx={{color: props.logoColor}}>
                 <Button variant="outlined" color="inherit" onClick={props.handleClose}>Cancel</Button>
                 <Button variant="outlined" color="inherit" onClick={enquire}>Connect</Button>
             </DialogActions>
