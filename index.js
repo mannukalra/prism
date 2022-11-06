@@ -28,7 +28,7 @@ app.post('/sendmail', jsonParser, (req, res) => {
       from: 'araidarome@gmail.com',
       to: req.body.to,
       subject: req.body.subject,
-      text: req.body.body,
+      html: req.body.body,
       cc: req.body.cc
     };
 

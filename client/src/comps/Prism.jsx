@@ -18,9 +18,9 @@ function tabsList(tabs){
     ));
 }
 
-function tabsPanelList(tabs, selectedIndex){
+function tabsPanelList(tabs, selectedIndex, page){
     return tabs.map((tab, index) => (
-        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} />
+        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} page={page} />
     ));
 }
 
@@ -60,7 +60,7 @@ function Prism(props) {
             <TabPanel value={value} index={2}>
                 Item Three
             </TabPanel> */}
-            {tabsPanelList(config.tabs, selectedIndex)}
+            {tabsPanelList(config.tabs, selectedIndex, props.page)}
         </Box>
     );
 }

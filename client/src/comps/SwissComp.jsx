@@ -9,7 +9,7 @@ function listItems(list){
 }
 
 function SwissComp(props) {
-    const { tab, value, index, ...other } = props;
+    const { tab, value, index, page, ...other } = props;
     
     return (
       <div
@@ -20,7 +20,7 @@ function SwissComp(props) {
         {...other}
       >
         {value === index && (
-            tab.bgImage ? <FullImageCard tab={tab} /> :
+            tab.bgImage ? <FullImageCard tab={tab} page={page} /> :
             <Card sx={{ minHeight: "88vh"}}>
                 <CardContent>
                     <Typography variant="h3" component="div">

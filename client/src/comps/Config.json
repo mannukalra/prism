@@ -16,7 +16,11 @@
         "logo": "pnbc-logo.png",
         "logoColor": "#82B04D",
         "tabs": [
-            {"name": "Home", "content": "Light & Effective way to control pest!", "bgImage": "pnbc-home-bg.jpg"},
+            {"name": "Home", "content": "Light & Effective way to control pest!", 
+                "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us", "fontColor": "#82B04D",
+                "to": ["mkmandeepkalra@gmail.com"], "toact":["pestbugcontrol@gmail.com", "tarsem.tps@gmail.com"],
+                "cc": ["mannu.kalra29@gmail.com"]
+            },
             {"name": "About Us", "content": "Our quality oriented team is a group of dedicated professionals, which guarantees our services meet high-quality standards."},
             {"name": "Services", "content": "We help eradicate various kinds of pest and bugs, below are a list of few:"},
             {"name": "Locations", "list": ["Chandigarh sector 20...", "Yamunanagar sector 10...."]}
