@@ -4,6 +4,8 @@
         "appBarBGColor": "#002F6C",
         "logo": "o2s-logo.png",
         "logoColor": "#F7BF50",
+        "url": "http://o2s.life",
+        "phone": "7795593093",
         "tabs": [
             {"name": "Home", "content": "Observability simplified!", 
                 "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
@@ -19,6 +21,8 @@
         "appBarBGColor": "#F7BF50",
         "logo": "pnbc-logo.png",
         "logoColor": "#82B04D",
+        "url": "http://pnbc.in",
+        "phone": "7736349078",
         "tabs": [
             {"name": "Home", "content": "Light & Effective way to control pest!", 
                 "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us",

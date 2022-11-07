@@ -2,31 +2,25 @@ import Prism from './comps/Prism';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import prismLogo from './prism.png';
 import './App.css';
+import data from "./Config.json";
 
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PrismHome />} />
-        <Route path="/o2s" element={<Prism page="o2s" />} />
-        <Route path="/pnbc" element={<Prism page="pnbc" />} />
-      </Routes>
-    </BrowserRouter>
-  );
+function links(data){
+  return Object.keys(data).map((item, index) => (
+    <div key={index}><Link className="App-link" to={"/"+item} target="_blank">{data[item].label}</Link></div>
+  ));
 }
 
-
-let Nav = () => {
-  return (
-    <div className='Nav-items'>
-      <Link className="App-link" to="/o2s" target="_blank">O2S</Link>
-      <br/>
-      <Link className="App-link" to="/pnbc" target="_blank">P&BC</Link>
-    </div>
-  );
+function anchors(data){
+  return Object.keys(data).map((item, index) => (
+    <div key={index}><a className="App-link" href={data[item].url} target="_blank" rel="noopener noreferrer">{data[item].label}</a></div>
+  ));
 }
 
+function routes(data){
+  return Object.keys(data).map((item, index) => (
+    <Route key={"prism-home-"+index} path={"/"+item} element={<Prism page={item} config={data[item]} />} />
+  ));
+}
 
 let PrismHome = () => {
   return (
@@ -35,16 +29,29 @@ let PrismHome = () => {
         <p>
           Welcome to PRISM
         </p>
-        <Nav />
+        <div className='Nav-items'>
+          {links(data)}
+        </div>
         <img src={prismLogo} className="App-logo" alt="logo" />
         <div>
-          <a className="App-link" href="http://o2s.life" target="_blank" rel="noopener noreferrer">O2S</a>
-          <br/>
-          <a className="App-link" href="http://pnbc.in" target="_blank" rel="noopener noreferrer">P&BC</a>
+          {anchors(data)}
         </div>
       </header>
     </div>
   );
 };
+
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route key="prism-home" path="/" element={<PrismHome />} />
+        {routes(data)}
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
 
 export default App;

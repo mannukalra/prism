@@ -9,7 +9,7 @@ function listItems(list){
 }
 
 function SwissComp(props) {
-    const { tab, value, index, page, logoColor, connectOpen, ...other } = props;
+    const { tab, value, index, page, logoColor, connectOpen, navToHome, ...other } = props;
     
     return (
       <div
@@ -38,7 +38,7 @@ function SwissComp(props) {
                     }
                 </CardContent>
                 <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
-                    <Button size="large" sx={{color: logoColor}} onClick={props.navToHome}>Learn More</Button>
+                    <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Learn More</Button>
                 </CardActions>
             </Card>
         )}

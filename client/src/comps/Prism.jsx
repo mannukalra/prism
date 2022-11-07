@@ -1,5 +1,4 @@
-import data from "./Config.json";
-import { AppBar, Box, Container, Tab, Tabs, Tooltip } from "@mui/material";
+import { AppBar, Box, Container, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useState } from 'react'
 import SwissComp from "./SwissComp";
 
@@ -18,16 +17,16 @@ function tabsList(tabs){
     ));
 }
 
-function tabsPanelList(tabs, selectedIndex, page, navToHome, logoColor, connectOpen){
+function tabsPanelList(tabs, selectedIndex, page, logoColor, connectOpen, navToHome){
     return tabs.map((tab, index) => (
         <SwissComp tab={tab} value={selectedIndex} index={index} key={index} page={page} 
-            navToHome={navToHome} logoColor={logoColor} connectOpen={connectOpen} />
+            logoColor={logoColor} connectOpen={connectOpen} navToHome={navToHome} />
     ));
 }
 
 function Prism(props) {
 
-    const config = data[props.page];
+    const config = props.config;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [connectOpen, setConnectOpen] = useState(false);
     const handleChange = (event, newSelection) => {
@@ -46,7 +45,7 @@ function Prism(props) {
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
                         <Tooltip title={config.label}>
-                            <Box component="img" sx={{ height: 84, margin: '7px' }} alt="pnbc logo" src={require("../img/"+config.logo)} />
+                            <Box component="img" sx={{ height: 84, margin: '7px' }} alt="logo" src={require("../img/"+config.logo)} />
                         </Tooltip>
                         <Box sx={{ width: '100%', margin: '2.4rem', borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={selectedIndex} onChange={handleChange}
@@ -56,10 +55,14 @@ function Prism(props) {
                                 {tabsList(config.tabs)}
                             </Tabs>
                         </Box>
+                        <Tooltip title="Mobile & Whatsapp +91">
+                            <Box component="img" sx={{ height: 28, margin: '21px', marginRight: '10px' }} alt="phone logo" src={require("../img/phone_in_talk.png")} />
+                        </Tooltip>
+                        <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
                     </Box>
                 </Container>
             </AppBar>
-            {tabsPanelList(config.tabs, selectedIndex, props.page, navToHome, config.logoColor, connectOpen)}
+            {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, connectOpen, navToHome)}
         </Box>
     );
 }
