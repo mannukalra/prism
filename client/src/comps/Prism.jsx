@@ -1,8 +1,7 @@
-import { AppBar, Box, Container, Tab, Tabs, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Container, SvgIcon, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useState } from 'react'
 import SwissComp from "./SwissComp";
-
-
+import { ReactComponent as PhoneIcon } from "../img/phone_in_talk.svg";
 
 function a11yProps(index) {
     return {
@@ -56,7 +55,9 @@ function Prism(props) {
                             </Tabs>
                         </Box>
                         <Tooltip title="Mobile & Whatsapp +91">
-                            <Box component="img" sx={{ height: 28, margin: '21px', marginRight: '10px' }} alt="phone logo" src={require("../img/phone_in_talk.png")} />
+                            <SvgIcon viewBox="0 0 42 42" sx={{ margin: '21px', marginRight: '12px', transform: "scale(1.08)" }}>
+                                <PhoneIcon />
+                            </SvgIcon>
                         </Tooltip>
                         <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
                     </Box>
