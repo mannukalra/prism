@@ -45,11 +45,11 @@
         "label": "Simar & Hunar",
         "appBarBGColor": "#F0914D",
         "logo": "SimarHunar-logo.jpeg",
-        "logoColor": "#5F5F5F",
+        "logoColor": "#B7A68E",
         "url": "http://simarhunar.in",
         "phone": "7349471124",
         "tabs": [
-            {"name": "Home", "content": "Here she comes!", 
+            {"name": "Home", "content": "Waiting for her!", 
                 "bgImage": "simarhunar-home-bg.jpg", "connectText": "Contact Us",
                 "to":["sindhuja.asingh123@gmail.com", "sindhuja.asingh@yahoo.co.in"],
                 "cc": ["mannu.kalra29@gmail.com"]
