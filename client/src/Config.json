@@ -12,8 +12,8 @@
                 "to":["mkmandeepkalra@gmail.com"],
                 "cc": ["mannu.kalra29@gmail.com"]
             },
-            {"name": "About Us", "content": "Wait for it.."},
-            {"name": "Services", "content": "Wait for it.."}
+            {"name": "Services", "content": "Wait for it.."},
+            {"name": "About Us", "content": "Wait for it.."}
         ]
     },
     "pnbc": {
@@ -29,9 +29,16 @@
                 "to":["pestbugcontrol@gmail.com", "tarsem.tps@gmail.com"],
                 "cc": ["mannu.kalra29@gmail.com"]
             },
-            {"name": "About Us", "content": "Our quality oriented team is a group of dedicated professionals, which guarantees our services meet high-quality standards."},
-            {"name": "Services", "content": "We help eradicate various kinds of pest and bugs, below are a list of few:"},
-            {"name": "Locations", "list": ["Chandigarh sector 20...", "Yamunanagar sector 10...."]}
+            {"name": "Services",
+                "cardItems": [{"label": "Mosquito Control", "desc": "Helps you repel mosquitoes from your homes, office spaces and surroundings.", "image": "mosquito-control.jpg"},
+                                {"label": "Rodent Control", "desc": "Helps you expel the rodents that plague your homes and commercial buildings", "image": "rodent-control.jpg"},
+                                {"label": "Termite Control", "desc": "Helps you expel the termites that ruins your furniture and flooring.", "image": "termite-control.jpg"},
+                                {"label": "Cockroach Control", "desc": "Helps you expel cockroaches from your homes and office areas.", "image": "cockroach-control.jpg"},
+                                {"label": "General Pest Control", "desc": "Affordable, safe and reliable pest control services.", "image": "pest-control.jpg"}
+                            ],
+                "direction": "row"},
+            {"name": "Locations", "textItems": ["Chandigarh sector 20...", "Yamunanagar sector 10...."]},
+            {"name": "About Us", "content": "We help eradicate various kinds of pest and bugs. Our quality oriented team is a group of dedicated professionals, which guarantees our services meet high-quality standards."}
         ]
     }
 }

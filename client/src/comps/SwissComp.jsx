@@ -1,10 +1,31 @@
-import {Button, Card, CardActions, CardContent, Typography, Paper, Grid } from "@mui/material";
+import {Button, Card, CardActions, CardContent, Paper, Grid, CardHeader, CardMedia, Typography } from "@mui/material";
 import FullImageCard from "./FullImageCard";
 
 
-function listItems(list){
+function textItems(list){
     return list.map((item, index) => (
-        <Paper key={index} sx={{fontSize: 36, maxWidth: "80%", margin: "1rem", padding: "1.5rem"}}>{item}</Paper>
+        <Paper key={index} sx={{fontSize: 36, margin: ".5rem", padding: ".5rem", minWidth: "84%"}}>
+            <Typography variant="h4" color="text.secondary" component="div" marginLeft="2rem">
+                {item}
+            </Typography>
+        </Paper>
+    ));
+}
+
+function cardItems(list, page){
+    return list.map((item, index) => (
+        <Card key={index} sx={{ margin: ".5rem", width: "44%" }}>
+            <CardHeader
+                title={item.label}
+                subheader={item.desc}
+            />
+            <CardMedia
+                component="img"
+                height="300"
+                image={require("../img/"+page+"/"+item.image)}
+                alt="Paella dish"
+            />
+        </Card>
     ));
 }
 
@@ -20,22 +41,19 @@ function SwissComp(props) {
         {...other}
       >
         {value === index && (
-            tab.bgImage ? <FullImageCard tab={tab} page={page} logoColor={logoColor} connectOpen={connectOpen}/> :
-            <Card sx={{ minHeight: "88vh"}}>
+            tab.bgImage ? 
+            <FullImageCard tab={tab} page={page} logoColor={logoColor} connectOpen={connectOpen}/> :
+            <Card sx={{ minHeight: "85vh", background: "#E7EBF0", margin: ".8rem" }}>
                 <CardContent>
-                    <Typography variant="h3" component="div">
-                        {tab.content}
-                    </Typography>
-                    
-                    {
-                        tab.list && 
-                        <Grid container 
-                            direction="column"
+                    { tab.content && <Typography variant="h4" color="text.secondary" component="div" marginLeft="3rem">{ tab.content }</Typography> }
+                    <Grid container 
+                            direction={tab.direction ? tab.direction : "column"}
                             alignItems="center"
-                            justifyContent="center">
-                            {listItems(tab.list)}
-                        </Grid>
-                    }
+                            justifyContent="center"
+                            sx={{}}>
+                        { tab.cardItems && cardItems(tab.cardItems, page) }
+                        { tab.textItems && textItems(tab.textItems) }
+                    </Grid>
                 </CardContent>
                 <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
                     <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Learn More</Button>
