@@ -28,6 +28,7 @@ function Prism(props) {
     const config = props.config;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [connectOpen, setConnectOpen] = useState(false);
+
     const handleChange = (event, newSelection) => {
         setConnectOpen(false);
         setSelectedIndex(newSelection);
@@ -39,7 +40,7 @@ function Prism(props) {
     }
 
     return (
-        <Box>
+        <Box sx={{ width: props.isMobile ? 'fit-content' : 'auto' }}>
             <AppBar position="static" sx={{ background: config.appBarBGColor, height: '84px'}}>
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
