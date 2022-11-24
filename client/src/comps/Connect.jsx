@@ -1,9 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { PageContext } from "../context/CommonContext";
 
 
 function triggerMail (to, cc, subject, body, page, closeConnect) {
-    console.log("trigger mail called!")
+    console.log("trigger mail called! "+page);
     let _data = { to, cc, subject, body }
     let url = `${window.location.href}sendmail`;
     
@@ -26,19 +27,20 @@ function triggerMail (to, cc, subject, body, page, closeConnect) {
             console.log(data)
             if('message' in data && data['message'].includes("Email sent successfully")){
                 closeConnect();
-                alert("Thanks for reaching out, we have recieved your message. \nWe'll connect with you shortly!");
+                alert("Thanks for reaching out, we have received your message. \nWe'll connect with you shortly!");
             }else
-                alert("Failed to send your connect request mail, please try later, aplogies for inconvinience.");
+                alert("Failed to receive your connect request email, please try later, aplogies for inconvinience.");
         })
         .catch(err => {
             console.log(err)
-            alert("Some error occured while sending mail, please try later, aplogies for inconvinience.");
+            alert("Some error occured while receiving your query by email, please try later, aplogies for inconvinience.");
     });
 }
 
 
 function Connect(props) {
     const [mailContent, setMailContent] = useState(props.mailContent);
+    const { page } = useContext(PageContext);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -61,9 +63,9 @@ function Connect(props) {
     function enquire(){
         console.log("inside enquire");
         if(mailContent.name && mailContent.contact){
-            let subject = mailContent.name+" wants to connect with "+props.page+"!"
-            let body = "Dear "+props.page+",<br><br>Please reach out "+mailContent.name+" at "+mailContent.contact+" regarding below query:<br>"+(mailContent.query || "Sorry, empty query!!")
-            triggerMail(props.tab.to, props.tab.cc, subject, body, props.page, props.handleClose);
+            let subject = mailContent.name+" wants to connect with "+page+"!"
+            let body = "Dear "+page+",<br><br>Please reach out "+mailContent.name+" at "+mailContent.contact+" regarding below query:<br>"+(mailContent.query || "Sorry, empty query!!")
+            triggerMail(props.tab.to, props.tab.cc, subject, body, page, props.handleClose);
         }else{
             console.log("invalid input");
             alert("Please provide at least Name and Contact (Phone number or Email address)!")

@@ -1,4 +1,6 @@
 import {Button, Card, CardActions, CardContent, Paper, Grid, CardHeader, CardMedia, Typography } from "@mui/material";
+import { useContext } from "react";
+import { PageContext } from "../context/CommonContext";
 import FullImageCard from "./FullImageCard";
 
 
@@ -30,8 +32,8 @@ function cardItems(list, page){
 }
 
 function SwissComp(props) {
-    const { tab, value, index, page, logoColor, connectOpen, navToHome, ...other } = props;
-    
+    const { tab, value, index, logoColor, connectOpen, navToHome, ...other } = props;
+    const { page } = useContext(PageContext);
     return (
       <div
         role="tabpanel"
@@ -42,7 +44,7 @@ function SwissComp(props) {
       >
         {value === index && (
             tab.bgImage ? 
-            <FullImageCard tab={tab} page={page} logoColor={logoColor} connectOpen={connectOpen}/> :
+            <FullImageCard tab={tab} logoColor={logoColor} connectOpen={connectOpen}/> :
             <Card sx={{ minHeight: "85vh", background: "#E7EBF0", margin: ".8rem" }}>
                 <CardContent>
                     { tab.content && <Typography variant="h4" color="text.secondary" component="div" marginLeft="3rem">{ tab.content }</Typography> }

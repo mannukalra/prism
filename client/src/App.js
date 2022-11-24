@@ -4,22 +4,37 @@ import prismLogo from './prism.png';
 import './App.css';
 import data from "./Config.json";
 import { useEffect, useState } from 'react';
+import { CommonContext } from './context/CommonContext';
+
 
 function links(data){
   return Object.keys(data).map((item, index) => (
-    <div key={index}><Link className="App-link" to={"/"+item} target="_blank">{data[item].label}</Link></div>
+    <div key={index} style={{whiteSpace: 'nowrap'}}>
+      <Link className="App-link" to={"/"+item} target="_blank">
+        {data[item].label}
+      </Link>
+    </div>
   ));
 }
 
 function anchors(data){
   return Object.keys(data).map((item, index) => (
-    <div key={index}><a className="App-link" href={data[item].url} target="_blank" rel="noopener noreferrer">{data[item].label}</a></div>
+    <div key={index} style={{whiteSpace: 'nowrap'}}>
+      <a className="App-link" href={data[item].url} target="_blank" rel="noopener noreferrer">
+        {data[item].label}
+      </a>
+    </div>
   ));
 }
 
 function routes(data, isMobile){
   return Object.keys(data).map((item, index) => (
-    <Route key={"prism-home-"+index} path={"/"+item} element={<Prism page={item} isMobile={isMobile} config={data[item]} />} />
+      <Route key={"prism-home-"+index} path={"/"+item} 
+        element={
+          <CommonContext.Provider value={{ isMobile }}>
+            <Prism page={item} config={data[item]} />
+          </CommonContext.Provider>
+        }/>
   ));
 }
 

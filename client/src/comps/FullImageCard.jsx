@@ -13,7 +13,6 @@ function FullImageCard(props){
         setConnectOpen(false);
     };
 
-
     return (
         <Card sx={{position: "relative", margin: ".8rem"}}>
             <CardMedia
@@ -38,8 +37,7 @@ function FullImageCard(props){
                 mailContent={{name: "", contact: "", query: ""}}
                 open={connectOpen}
                 handleClose={handleCloseConnect}
-                tab={props.tab} 
-                page={props.page} 
+                tab={props.tab}
                 logoColor={props.logoColor} />
             </CardActions>
         </Card>

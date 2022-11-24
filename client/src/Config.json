@@ -13,7 +13,7 @@
                 "cc": ["mannu.kalra29@gmail.com"]
             },
             {"name": "Services", "content": "Wait for it.."},
-            {"name": "About Us", "content": "Wait for it.."}
+            {"name": "About Us", "content": "Wait for this one too... )"}
         ]
     },
     "pnbc": {
@@ -64,7 +64,7 @@
                                 {"label": "Simar & Hunar", "desc": "", "image": "simhun01.jpeg"}
                             ],
                 "direction": "row"},
-            {"name": "About Us", "content": "We are didi and bhaiya!"}
+            {"name": "About Us", "content": "We are Simar & Hunar (: didi and bhaiya :)"}
         ]
     }
 }

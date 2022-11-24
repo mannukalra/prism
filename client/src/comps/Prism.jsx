@@ -1,7 +1,9 @@
 import { AppBar, Box, Container, SvgIcon, Tab, Tabs, Tooltip, Typography } from "@mui/material";
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import SwissComp from "./SwissComp";
 import { ReactComponent as PhoneIcon } from "../img/phone_in_talk.svg";
+import { CommonContext } from '../context/CommonContext';
+import { PageContext } from '../context/CommonContext';
 
 function a11yProps(index) {
     return {
@@ -18,8 +20,10 @@ function tabsList(tabs){
 
 function tabsPanelList(tabs, selectedIndex, page, logoColor, connectOpen, navToHome){
     return tabs.map((tab, index) => (
-        <SwissComp tab={tab} value={selectedIndex} index={index} key={index} page={page} 
-            logoColor={logoColor} connectOpen={connectOpen} navToHome={navToHome} />
+        <PageContext.Provider value={{page}} key={index}>
+            <SwissComp tab={tab} value={selectedIndex} index={index}
+                logoColor={logoColor} connectOpen={connectOpen} navToHome={navToHome} />
+        </PageContext.Provider>
     ));
 }
 
@@ -28,6 +32,7 @@ function Prism(props) {
     const config = props.config;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [connectOpen, setConnectOpen] = useState(false);
+    const { isMobile } = useContext(CommonContext);
 
     const handleChange = (event, newSelection) => {
         setConnectOpen(false);
@@ -40,7 +45,7 @@ function Prism(props) {
     }
 
     return (
-        <Box sx={{ width: props.isMobile ? 'fit-content' : 'auto' }}>
+        <Box sx={{ width: isMobile ? 'fit-content' : 'auto' }}>
             <AppBar position="static" sx={{ background: config.appBarBGColor, height: '84px'}}>
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
