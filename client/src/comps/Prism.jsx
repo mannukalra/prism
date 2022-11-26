@@ -7,6 +7,7 @@ import { ReactComponent as MsgIcon } from "../img/icons/msg.svg";
 import { ReactComponent as WhatsAppIcon } from "../img/icons/whatsapp-48.svg";
 import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
+import { Helmet } from "react-helmet-async";
 
 const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-'}, 
                         {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
@@ -72,6 +73,8 @@ function Prism(props) {
         setSelectedIndex(0);
     }
 
+    //document.getElementById("googleSiteVerification").setAttribute('content', config.googleSiteVerification);
+    
     return (
         <Box sx={{ width: isMobile ? 'fit-content' : 'auto' }}>
             <AppBar position="static" sx={{ background: config.appBarBGColor, height: '84px'}}>
@@ -103,6 +106,12 @@ function Prism(props) {
                 </Container>
             </AppBar>
             {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, connectOpen, navToHome)}
+            <Helmet>
+                <title>{config.seoTitle}</title>
+                <meta name="description" content={config.seoDesc} />
+                <meta name="google-site-verification" content={config.googleSiteVerification} />
+                <link rel="canonical" href="" />
+            </Helmet>
         </Box>
     );
 }

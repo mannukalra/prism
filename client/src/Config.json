@@ -6,6 +6,9 @@
         "logoColor": "#F7BF50",
         "url": "http://o2s.life",
         "phone": "7795593093",
+        "seoTitle": "Open Observability simplified",
+        "seoDesc": "Open Observability simplified in an effiecient way",
+        "googleSiteVerification": "",
         "tabs": [
             {"name": "Home", "content": "Observability simplified!", 
                 "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
@@ -23,6 +26,9 @@
         "logoColor": "#82B04D",
         "url": "http://pnbc.in",
         "phone": "7736349078",
+        "seoTitle": "Pest and bugs control",
+        "seoDesc": "Pest Control, PestControl, Pest and Bugs, Effective control of pest and bugs",
+        "googleSiteVerification": "vD5kuSkLXOGmD_R3G6KbYSH-lITfg_GlifOvzvpWBTE",
         "tabs": [
             {"name": "Home", "content": "Light & Effective way to control pest!", 
                 "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us",
