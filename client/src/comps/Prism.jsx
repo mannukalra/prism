@@ -1,9 +1,28 @@
-import { AppBar, Box, Container, SvgIcon, Tab, Tabs, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, ButtonBase, Container, Link, Menu, MenuItem, SvgIcon, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useState, useContext } from 'react'
 import SwissComp from "./SwissComp";
-import { ReactComponent as PhoneIcon } from "../img/phone_in_talk.svg";
+import { ReactComponent as PhoneMsgIcon } from "../img/icons/phone_msg.svg";
+import { ReactComponent as PhoneIcon } from "../img/icons/phone.svg";
+import { ReactComponent as MsgIcon } from "../img/icons/msg.svg";
+import { ReactComponent as WhatsAppIcon } from "../img/icons/whatsapp-48.svg";
 import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
+
+const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-'}, 
+                        {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
+                        {label: "Whatsapp", icon: <WhatsAppIcon/>, action: 'whatsapp://send?text=hello&phone=+91-'}];
+
+function phoneOptionsList(phone){
+    return phoneOptions.map((item, index) => (
+        <MenuItem component={Link} href={item.action + phone} key={index} >
+            <Tooltip title={item.label}>
+                <SvgIcon viewBox="0 0 42 42" sx={{ margin: '12px', marginTop: '20px', transform: "scale(1.44)" }}>
+                    {item.icon}
+                </SvgIcon>
+            </Tooltip>
+        </MenuItem>
+    ));
+}
 
 function a11yProps(index) {
     return {
@@ -33,6 +52,15 @@ function Prism(props) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [connectOpen, setConnectOpen] = useState(false);
     const { isMobile } = useContext(CommonContext);
+    
+    const [anchorEl, setAnchorEl] = useState(null);
+    const phoneMenuOpen = Boolean(anchorEl);
+    const handleHover = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleChange = (event, newSelection) => {
         setConnectOpen(false);
@@ -60,12 +88,17 @@ function Prism(props) {
                                 {tabsList(config.tabs)}
                             </Tabs>
                         </Box>
-                        <Tooltip title="Mobile & Whatsapp +91">
-                            <SvgIcon viewBox="0 0 42 42" sx={{ margin: '21px', marginRight: '12px', transform: "scale(1.08)" }}>
-                                <PhoneIcon />
-                            </SvgIcon>
-                        </Tooltip>
-                        <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
+                        <Box>
+                            <ButtonBase sx={{height: "max-content"}} onMouseEnter={handleHover}>
+                                <SvgIcon viewBox="0 0 42 42" sx={{ margin: '12px', marginTop: '28px', transform: "scale(1.08)" }}>
+                                    <PhoneMsgIcon />
+                                </SvgIcon>
+                                <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
+                            </ButtonBase>
+                            <Menu id="phone-menu" anchorEl={anchorEl} open={phoneMenuOpen} onClose={handleClose} disablePortal={true}>
+                                {phoneOptionsList(config.phone)}
+                            </Menu>
+                        </Box>
                     </Box>
                 </Container>
             </AppBar>
