@@ -52,6 +52,8 @@
         "logoColor": "#B7A68E",
         "url": "http://simarhunar.in",
         "phone": "7349471124",
+        "seoTitle": "Simar & Hunar",
+        "seoDesc": "Didi and Bhaiya",
         "tabs": [
             {"name": "Home", "content": "Waiting for her!", 
                 "bgImage": "simarhunar-home-bg.jpg", "connectText": "Contact Us",
