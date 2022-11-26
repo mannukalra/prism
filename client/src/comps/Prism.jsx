@@ -73,8 +73,6 @@ function Prism(props) {
         setSelectedIndex(0);
     }
 
-    //document.getElementById("googleSiteVerification").setAttribute('content', config.googleSiteVerification);
-    
     return (
         <Box sx={{ width: isMobile ? 'fit-content' : 'auto' }}>
             <AppBar position="static" sx={{ background: config.appBarBGColor, height: '84px'}}>
@@ -109,7 +107,6 @@ function Prism(props) {
             <Helmet>
                 <title>{config.seoTitle}</title>
                 <meta name="description" content={config.seoDesc} />
-                <meta name="google-site-verification" content={config.googleSiteVerification} />
                 <link rel="canonical" href="" />
             </Helmet>
         </Box>
