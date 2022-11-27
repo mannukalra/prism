@@ -1,5 +1,5 @@
 import {Button, Card, CardActions, CardContent, Paper, Grid, CardHeader, CardMedia, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PageContext } from "../context/CommonContext";
 import FullImageCard from "./FullImageCard";
 
@@ -32,20 +32,36 @@ function cardItems(list, page){
 }
 
 function SwissComp(props) {
-    const { tab, value, index, logoColor, connectOpen, navToHome, ...other } = props;
-    const { page } = useContext(PageContext);
+    const { tab, selectedIndex, currIndex, logoColor, navToHome, itemRef, lastItem, ...other } = props;
+    const { page, seoTitle } = useContext(PageContext);
+
+    // const [offset, setOffset] = useState(0);
+    // TODO handle tab change on scroll
+    // useEffect(() => {
+    //     const onScroll = () => setOffset(window.pageYOffset);
+    //     // clean up code
+    //     window.removeEventListener('scroll', onScroll);
+    //     window.addEventListener('scroll', onScroll, { passive: true });
+    //     return () => window.removeEventListener('scroll', onScroll);
+    // }, [selectedIndex]);
+
+    // console.log(offset); 
+
     return (
       <div
         role="tabpanel"
-        hidden={value !== index}
-        id={`prism-tabpanel-${index}`}
-        aria-labelledby={`prism-tab-${index}`}
+        id={`prism-tabpanel-${currIndex}`}
+        aria-labelledby={`prism-tab-${currIndex}`}
         {...other}
+        ref={selectedIndex === currIndex ? itemRef : null}
       >
-        {value === index && (
+        {(
             tab.bgImage ? 
-            <FullImageCard tab={tab} logoColor={logoColor} connectOpen={connectOpen}/> :
-            <Card sx={{ minHeight: "85vh", background: "#E7EBF0", margin: ".8rem" }}>
+            <FullImageCard tab={tab} logoColor={logoColor} /> :
+            <Card sx={{ background: "#E7EBF0", margin: ".8rem" }}>
+                <Typography variant="h4" color="text.secondary" sx={{ marginLeft: "3rem", marginTop: "1rem"}}>
+                    {tab.name}
+                </Typography>
                 <CardContent>
                     { tab.content && <Typography variant="h4" color="text.secondary" component="div" marginLeft="3rem">{ tab.content }</Typography> }
                     <Grid container 
@@ -57,9 +73,14 @@ function SwissComp(props) {
                         { tab.textItems && textItems(tab.textItems) }
                     </Grid>
                 </CardContent>
-                <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
-                    <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Learn More</Button>
-                </CardActions>
+                { lastItem &&
+                    <>
+                        <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
+                            <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Scroll Top</Button>
+                        </CardActions>
+                        <Typography variant="caption" >&copy;{"2022 "+seoTitle+". All rights reserved."}</Typography>
+                    </>
+                }
             </Card>
         )}
       </div>

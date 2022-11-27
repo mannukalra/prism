@@ -1,5 +1,5 @@
 import { AppBar, Box, ButtonBase, Container, Link, Menu, MenuItem, SvgIcon, Tab, Tabs, Tooltip, Typography } from "@mui/material";
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef, useEffect } from 'react'
 import SwissComp from "./SwissComp";
 import { ReactComponent as PhoneMsgIcon } from "../img/icons/phone_msg.svg";
 import { ReactComponent as PhoneIcon } from "../img/icons/phone.svg";
@@ -8,6 +8,7 @@ import { ReactComponent as WhatsAppIcon } from "../img/icons/whatsapp-48.svg";
 import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
 import { Helmet } from "react-helmet-async";
+import { styled } from '@mui/material/styles';
 
 const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-'}, 
                         {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
@@ -25,6 +26,15 @@ function phoneOptionsList(phone){
     ));
 }
 
+const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(1.2, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+}));
+
 function a11yProps(index) {
     return {
       id: `prism-tab-${index}`,
@@ -38,11 +48,11 @@ function tabsList(tabs){
     ));
 }
 
-function tabsPanelList(tabs, selectedIndex, page, logoColor, connectOpen, navToHome){
+function tabsPanelList(tabs, selectedIndex, page, logoColor, navToHome, itemRef, seoTitle){
     return tabs.map((tab, index) => (
-        <PageContext.Provider value={{page}} key={index}>
-            <SwissComp tab={tab} value={selectedIndex} index={index}
-                logoColor={logoColor} connectOpen={connectOpen} navToHome={navToHome} />
+        <PageContext.Provider value={{page, seoTitle}} key={index}>
+            <SwissComp tab={tab} selectedIndex={selectedIndex} currIndex={index} logoColor={logoColor}
+             navToHome={navToHome}  itemRef={itemRef} lastItem={index+1 === tabs.length}/>
         </PageContext.Provider>
     ));
 }
@@ -50,9 +60,18 @@ function tabsPanelList(tabs, selectedIndex, page, logoColor, connectOpen, navToH
 function Prism(props) {
 
     const config = props.config;
+    const itemRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [connectOpen, setConnectOpen] = useState(false);
     const { isMobile } = useContext(CommonContext);
+
+    useEffect(() => {
+        if (itemRef && itemRef.current) {
+          window.scrollTo({
+            top: itemRef.current.offsetTop - 96,
+            behavior: "smooth"
+          });
+        }
+    });
     
     const [anchorEl, setAnchorEl] = useState(null);
     const phoneMenuOpen = Boolean(anchorEl);
@@ -64,18 +83,16 @@ function Prism(props) {
     };
 
     const handleChange = (event, newSelection) => {
-        setConnectOpen(false);
         setSelectedIndex(newSelection);
     };
 
     const navToHome = () =>{
-        setConnectOpen(true);
         setSelectedIndex(0);
     }
 
     return (
         <Box sx={{ width: isMobile ? 'fit-content' : 'auto' }}>
-            <AppBar position="static" sx={{ background: config.appBarBGColor, height: '84px'}}>
+            <AppBar position="fixed" sx={{ background: config.appBarBGColor, height: '84px'}}>
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
                         <Tooltip title={config.label}>
@@ -103,7 +120,10 @@ function Prism(props) {
                     </Box>
                 </Container>
             </AppBar>
-            {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, connectOpen, navToHome)}
+            <DrawerHeader />
+            <div>
+                {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, navToHome, itemRef, config.seoTitle)}
+            </div>
             <Helmet>
                 <title>{config.seoTitle}</title>
                 <meta name="description" content={config.seoDesc} />
