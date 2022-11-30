@@ -103,7 +103,7 @@ function Prism(props) {
                                 </SvgIcon>
                                 <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
                             </ButtonBase>
-                            <Menu id="phone-menu" anchorEl={anchorEl} open={phoneMenuOpen} onClose={handleClose} disablePortal={true}>
+                            <Menu id="phone-menu" anchorEl={anchorEl} open={phoneMenuOpen} onClose={handleClose} disablePortal={true} disableScrollLock={true}>
                                 {phoneOptionsList(config.phone)}
                             </Menu>
                         </Box>
