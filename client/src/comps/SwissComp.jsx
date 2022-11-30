@@ -1,5 +1,5 @@
-import {Button, Card, CardActions, CardContent, Paper, Grid, CardHeader, CardMedia, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import {Button, Card, CardActions, CardContent, Paper, Grid, CardHeader, CardMedia, Typography, AppBar } from "@mui/material";
+import { useContext } from "react";
 import { PageContext } from "../context/CommonContext";
 import FullImageCard from "./FullImageCard";
 
@@ -32,21 +32,17 @@ function cardItems(list, page){
 }
 
 function SwissComp(props) {
-    const { tab, selectedIndex, currIndex, logoColor, navToHome, itemRef, lastItem, ...other } = props;
-    const { page, seoTitle } = useContext(PageContext);
+    const { tab, selectedIndex, currIndex, logoColor, navToTab, itemRef, isLastItem, appBarBGColor, ...other } = props;
+    const { page, seoTitle } = useContext(PageContext); 
 
-    // const [offset, setOffset] = useState(0);
-    // TODO handle tab change on scroll
-    // useEffect(() => {
-    //     const onScroll = () => setOffset(window.pageYOffset);
-    //     // clean up code
-    //     window.removeEventListener('scroll', onScroll);
-    //     window.addEventListener('scroll', onScroll, { passive: true });
-    //     return () => window.removeEventListener('scroll', onScroll);
-    // }, [selectedIndex]);
-
-    // console.log(offset); 
-
+    const navToHome = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+        navToTab(0);
+    }
+    
     return (
       <div
         role="tabpanel"
@@ -73,12 +69,14 @@ function SwissComp(props) {
                         { tab.textItems && textItems(tab.textItems) }
                     </Grid>
                 </CardContent>
-                { lastItem &&
+                { isLastItem &&
                     <>
                         <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
                             <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Scroll Top</Button>
                         </CardActions>
-                        <Typography variant="caption" >&copy;{"2022 "+seoTitle+". All rights reserved."}</Typography>
+                        <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: appBarBGColor }}>
+                            <Typography variant="caption" align="right" >&copy;{"2022 "+seoTitle+". All rights reserved."}</Typography>
+                        </AppBar>
                     </>
                 }
             </Card>

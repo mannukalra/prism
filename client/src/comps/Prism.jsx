@@ -48,11 +48,11 @@ function tabsList(tabs){
     ));
 }
 
-function tabsPanelList(tabs, selectedIndex, page, logoColor, navToHome, itemRef, seoTitle){
+function tabsPanelList(tabs, selectedIndex, page, logoColor, navToTab, itemRef, seoTitle, appBarBGColor){
     return tabs.map((tab, index) => (
         <PageContext.Provider value={{page, seoTitle}} key={index}>
-            <SwissComp tab={tab} selectedIndex={selectedIndex} currIndex={index} logoColor={logoColor}
-             navToHome={navToHome}  itemRef={itemRef} lastItem={index+1 === tabs.length}/>
+            <SwissComp id={"tabView"+index } tab={tab} selectedIndex={selectedIndex} currIndex={index} logoColor={logoColor}
+             navToTab={navToTab}  itemRef={itemRef} isLastItem={index+1 === tabs.length} appBarBGColor={appBarBGColor}/>
         </PageContext.Provider>
     ));
 }
@@ -86,8 +86,8 @@ function Prism(props) {
         setSelectedIndex(newSelection);
     };
 
-    const navToHome = () =>{
-        setSelectedIndex(0);
+    const navToTab = (index) =>{
+        setSelectedIndex(index);
     }
 
     return (
@@ -122,7 +122,7 @@ function Prism(props) {
             </AppBar>
             <DrawerHeader />
             <div>
-                {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, navToHome, itemRef, config.seoTitle)}
+                {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, navToTab, itemRef, config.seoTitle, config.appBarBGColor)}
             </div>
             <Helmet>
                 <title>{config.seoTitle}</title>
