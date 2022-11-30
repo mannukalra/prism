@@ -8,7 +8,6 @@ import { ReactComponent as WhatsAppIcon } from "../img/icons/whatsapp-48.svg";
 import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
 import { Helmet } from "react-helmet-async";
-import { styled } from '@mui/material/styles';
 
 const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-'}, 
                         {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
@@ -25,15 +24,6 @@ function phoneOptionsList(phone){
         </MenuItem>
     ));
 }
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(1.2, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
 
 function a11yProps(index) {
     return {
@@ -92,7 +82,7 @@ function Prism(props) {
 
     return (
         <Box sx={{ width: isMobile ? 'fit-content' : 'auto' }}>
-            <AppBar position="fixed" sx={{ background: config.appBarBGColor, height: '84px'}}>
+            <AppBar position="sticky" sx={{ background: config.appBarBGColor, height: '84px'}}>
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
                         <Tooltip title={config.label}>
@@ -120,7 +110,6 @@ function Prism(props) {
                     </Box>
                 </Container>
             </AppBar>
-            <DrawerHeader />
             <div>
                 {tabsPanelList(config.tabs, selectedIndex, props.page, config.logoColor, navToTab, itemRef, config.seoTitle, config.appBarBGColor)}
             </div>

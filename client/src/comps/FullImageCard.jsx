@@ -17,7 +17,7 @@ function FullImageCard(props){
     };
 
     return (
-        <Card sx={{position: "relative", margin: ".8rem" }}>
+        <Card sx={{position: "relative", margin: ".7rem" }}>
             <CardMedia
                 component="img"
                 image={require("../img/"+tab.bgImage)}

@@ -54,7 +54,7 @@ function SwissComp(props) {
         {(
             tab.bgImage ? 
             <FullImageCard tab={tab} logoColor={logoColor} /> :
-            <Card sx={{ background: "#E7EBF0", margin: ".8rem" }}>
+            <Card sx={{ background: "#E7EBF0", margin: ".7rem" }}>
                 <Typography variant="h4" color="text.secondary" sx={{ marginLeft: "3rem", marginTop: "1rem"}}>
                     {tab.name}
                 </Typography>
@@ -75,7 +75,7 @@ function SwissComp(props) {
                             <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Scroll Top</Button>
                         </CardActions>
                         <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: appBarBGColor }}>
-                            <Typography variant="caption" align="right" >&copy;{"2022 "+seoTitle+". All rights reserved."}</Typography>
+                            <Typography variant="caption" align="center" >&copy;{"2022 "+seoTitle+"."}</Typography>
                         </AppBar>
                     </>
                 }
