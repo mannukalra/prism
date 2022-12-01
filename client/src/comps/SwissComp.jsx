@@ -72,7 +72,7 @@ function SwissComp(props) {
                 { isLastItem &&
                     <>
                         <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
-                            <Button size="large" sx={{color: logoColor}} onClick={navToHome}>Scroll Top</Button>
+                            <Button size="large" sx={{color: logoColor, marginBottom: '1rem'}} onClick={navToHome}>Scroll Top</Button>
                         </CardActions>
                         <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: appBarBGColor }}>
                             <Typography variant="caption" align="center" >&copy;{"2022 "+seoTitle+"."}</Typography>
