@@ -35,11 +35,12 @@ function SwissComp(props) {
     const { tab, selectedIndex, currIndex, logoColor, navToTab, itemRef, isLastItem, appBarBGColor, ...other } = props;
     const { page, seoTitle } = useContext(PageContext); 
 
-    const navToHome = () => {
+    const navToHome = (event) => {
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
         });
+        event.target.blur();
         navToTab(0);
     }
     

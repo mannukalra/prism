@@ -9,7 +9,7 @@ import { CommonContext } from './context/CommonContext';
 
 function links(data){
   return Object.keys(data).map((item, index) => (
-    <div key={index} style={{whiteSpace: 'nowrap'}}>
+    <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
       <Link className="App-link" to={"/"+item} target="_blank">
         {data[item].label}
       </Link>
@@ -19,7 +19,7 @@ function links(data){
 
 function anchors(data){
   return Object.keys(data).map((item, index) => (
-    <div key={index} style={{whiteSpace: 'nowrap'}}>
+    <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
       <a className="App-link" href={data[item].url} target="_blank" rel="noopener noreferrer">
         {data[item].label}
       </a>

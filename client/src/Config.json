@@ -1,23 +1,4 @@
 {
-    "o2s": {
-        "label": "O2S",
-        "appBarBGColor": "#002F6C",
-        "logo": "o2s-logo.png",
-        "logoColor": "#F7BF50",
-        "url": "http://o2s.life",
-        "phone": "7795593093",
-        "seoTitle": "Open Observability simplified",
-        "seoDesc": "Open Observability simplified in an effiecient way",
-        "tabs": [
-            {"name": "Home", "content": "Observability simplified!", 
-                "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
-                "to":["mkmandeepkalra@gmail.com"],
-                "cc": ["mannu.kalra29@gmail.com"]
-            },
-            {"name": "Services", "content": "Wait for it.."},
-            {"name": "About Us", "content": "Wait for this one too... )"}
-        ]
-    },
     "pnbc": {
         "label": "P&BC",
         "appBarBGColor": "#F7BF50",
@@ -71,6 +52,25 @@
                             ],
                 "direction": "row"},
             {"name": "About Us", "content": "We are Simar & Hunar (: didi and bhaiya :)"}
+        ]
+    },
+    "o2s": {
+        "label": "O2S",
+        "appBarBGColor": "#002F6C",
+        "logo": "o2s-logo.png",
+        "logoColor": "#F7BF50",
+        "url": "http://o2s.life",
+        "phone": "7795593093",
+        "seoTitle": "Open Observability simplified",
+        "seoDesc": "Open Observability simplified in an effiecient way",
+        "tabs": [
+            {"name": "Home", "content": "Observability simplified!", 
+                "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
+                "to":["mkmandeepkalra@gmail.com"],
+                "cc": ["mannu.kalra29@gmail.com"]
+            },
+            {"name": "Services", "content": "Wait for it.."},
+            {"name": "About Us", "content": "Wait for this one too... )"}
         ]
     }
 }

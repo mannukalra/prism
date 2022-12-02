@@ -32,7 +32,7 @@ function FullImageCard(props){
             <CardActions sx={{position: "relative", alignItems: "center", justifyContent: "center",
                 color: logoColor, backgroundColor: "rgba(0,0,0,.12)" }}>
               <Button size="xlarge" color="inherit" variant="outlined" onClick={handleOpenConnect}
-                sx={{marginBottom: "7rem", fontSize: '24px', borderWidth: "3px"}}>
+                sx={{marginBottom: "7rem", fontSize: '24px', borderWidth: "3px"}} >
                 {tab.connectText}
               </Button>
               <Connect 
