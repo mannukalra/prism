@@ -34,7 +34,7 @@ jobs:
           npm run test --if-present
           popd
       
-      - name: 'Resolve Project Dependencies Using Npm'
+      - name: 'Resolve Project client Dependencies Using Npm'
         shell: pwsh
         run: |
           pushd './client/.'
