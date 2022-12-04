@@ -8,7 +8,7 @@ const readFileAsync = util.promisify(fs.readFile);
 module.exports = async function (context, req) {
     var file = "index.html"
     let data;
-    if(req.url.endsWith("/api")){
+    if(req.url.endsWith("/api") || req.url.endsWith("/pnbc") || req.url.endsWith("/o2s")|| req.url.endsWith("/simarhunar")){
         try {
             data = await readFileAsync(__dirname + "/client/build/" +  file);
             context.log('GET ' + __dirname + "/client/build/" +  file);
