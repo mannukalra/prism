@@ -36,7 +36,7 @@ jobs:
       - name: 'Resolve Project client Dependencies Using Npm'
         shell: pwsh
         run: |
-          pushd './client/.'
+          pushd './api/client/.'
           npm install
           npm run build
           popd
