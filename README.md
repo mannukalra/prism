@@ -1,6 +1,5 @@
-# prism
-Multiple near-static web content from one SPA.
-Provides email connect/notify feature though!
-[PRISM](https://prismat.herokuapp.com/)
+# prism <br />
+Mother to multiple small websites through one SPA with email connect/notify functionality! <br />
+[PRISM](https://prismat.azurewebsites.net/api)
 
 
