@@ -10,7 +10,7 @@ import { CommonContext } from './context/CommonContext';
 function links(data){
   return Object.keys(data).map((item, index) => (
     <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
-      <Link className="App-link" to={"/"+item} target="_blank">
+      <Link className="App-link" to={"/api/"+item} target="_blank">
         {data[item].label}
       </Link>
     </div>
@@ -29,7 +29,7 @@ function anchors(data){
 
 function routes(data, isMobile){
   return Object.keys(data).map((item, index) => (
-      <Route key={"prism-home-"+index} path={"/"+item} 
+      <Route key={"prism-home-"+index} path={"/api/"+item} 
         element={
           <CommonContext.Provider value={{ isMobile }}>
             <Prism page={item} config={data[item]} />
@@ -75,7 +75,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route key="prism-home" path="/" element={PrismHome(isMobile)} />
+        <Route key="prism-home" path="/api" element={PrismHome(isMobile)} />
         {routes(data, isMobile)}
       </Routes>
     </BrowserRouter>
