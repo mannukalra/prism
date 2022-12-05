@@ -31,14 +31,7 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           npm install
           npm run build --if-present
-          popd
-      
-      - name: 'Resolve Project client Dependencies Using Npm'
-        shell: pwsh
-        run: |
-          pushd './api/client/.'
-          npm install
-          npm run build
+          npm run test --if-present
           popd
 
       - name: 'Run Azure Functions Action'
@@ -48,4 +41,4 @@ jobs:
           app-name: 'prismat'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7D003F45D7EF475180306A5455DD95A5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D39B60C9B50B4539B6D05FA1E98CB967 }}
