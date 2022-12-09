@@ -6,7 +6,7 @@ import FullImageCard from "./FullImageCard";
 
 function textItems(list){
     return list.map((item, index) => (
-        <Paper key={index} sx={{fontSize: 36, margin: ".5rem", padding: ".5rem", minWidth: "84%"}}>
+        <Paper key={index} sx={{fontSize: 36, margin: ".5rem", padding: "1rem", minWidth: "84%"}}>
             <Typography variant="h4" color="text.secondary" component="div" marginLeft="2rem">
                 {item}
             </Typography>
@@ -73,7 +73,7 @@ function SwissComp(props) {
                 { isLastItem &&
                     <>
                         <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
-                            <Button size="large" sx={{color: logoColor, marginBottom: '1rem', cursor: 'pointer'}} onClick={navToHome}>Scroll Top</Button>
+                            <Button size="xlarge" sx={{color: logoColor, marginBottom: '1.5rem', fontSize: '18px', cursor: 'pointer'}} onClick={navToHome}>Scroll Top</Button>
                         </CardActions>
                         <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: appBarBGColor }}>
                             <Typography variant="caption" align="center" >&copy;{"2022 "+seoTitle+"."}</Typography>
