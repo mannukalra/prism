@@ -16,17 +16,20 @@ function textItems(list){
 
 function cardItems(list, page){
     return list.map((item, index) => (
-        <Card key={index} sx={{ margin: ".5rem", width: "44%" }}>
+        <Card key={index} sx={{ margin: ".5rem", width: item.src ? "84%": "44%" }}>
             <CardHeader
                 title={item.label}
                 subheader={item.desc}
             />
-            <CardMedia
-                component="img"
-                height="300"
-                image={require("../img/"+page+"/"+item.image)}
-                alt="Paella dish"
-            />
+            { item.src ?
+                <CardMedia component="iframe" title={item.label} height="300" src={item.src} allowFullScreen="allowFullScreen" />
+              : <CardMedia
+                    component="img"
+                    height="300"
+                    image={require("../img/"+page+"/"+item.image)}
+                    alt="Paella dish"
+                />
+            }
         </Card>
     ));
 }

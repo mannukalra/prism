@@ -70,7 +70,7 @@ function App() {
       }
   }, []);
 
-  const isMobile = width <= 768;
+  const isMobile = width <= 840;
 
   return (
     <BrowserRouter>
