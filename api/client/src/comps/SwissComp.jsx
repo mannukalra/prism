@@ -22,7 +22,7 @@ function cardItems(list, page){
                 subheader={item.desc}
             />
             { item.src ?
-                <CardMedia component="iframe" title={item.label} height="300" src={item.src} allowFullScreen="allowFullScreen" />
+                <CardMedia component="iframe" title={item.label} height="300" src={item.src} allowFullScreen="allowFullScreen" frameBorder="0" />
               : <CardMedia
                     component="img"
                     height="300"

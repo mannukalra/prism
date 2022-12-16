@@ -9,13 +9,14 @@ import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
 import { Helmet } from "react-helmet-async";
 
-const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-'}, 
+const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-', webAction: 'tel:+91-'}, 
                         {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
-                        {label: "Whatsapp", icon: <WhatsAppIcon/>, action: 'whatsapp://send?text=hello&phone=+91-'}];
+                        {label: "Whatsapp", icon: <WhatsAppIcon/>, action: 'whatsapp://send?text=hello&phone=+91-', webAction: 'https://web.whatsapp.com/send?phone=91' }];
 
-function phoneOptionsList(phone){
+function phoneOptionsList(phone, isMobile){
     return phoneOptions.map((item, index) => (
-        <MenuItem component={Link} href={item.action + phone} key={index} >
+        <MenuItem component={Link} disabled={!isMobile && !item.webAction} target={ isMobile ? "_self" : "_blank" }
+            href={isMobile ? item.action + phone : item.webAction + phone} key={index} >
             <Tooltip title={item.label}>
                 <SvgIcon viewBox="0 0 42 42" sx={{ margin: '12px', marginTop: '20px', transform: "scale(1.44)" }}>
                     {item.icon}
@@ -103,8 +104,8 @@ function Prism(props) {
                                 </SvgIcon>
                                 <Typography sx={{ marginTop: '21px' }}>{config.phone}</Typography>
                             </ButtonBase>
-                            <Menu id="phone-menu" anchorEl={anchorEl} open={phoneMenuOpen} onClose={handleClose} disablePortal={true} disableScrollLock={true}>
-                                {phoneOptionsList(config.phone)}
+                            <Menu id="phone-menu" anchorEl={anchorEl} open={phoneMenuOpen} onClose={handleClose} disablePortal={false} disableScrollLock={false}>
+                                {phoneOptionsList(config.phone, isMobile)}
                             </Menu>
                         </Box>
                     </Box>
