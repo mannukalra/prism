@@ -41,7 +41,8 @@ function SwissComp(props) {
     const navToHome = (event) => {
         document.getElementById('tabView0')?.scrollIntoView({ behavior: 'smooth' });
         window.scrollTo({ top: 0, behavior: 'smooth',});
-        event.target.blur();
+        // event.target.blur();
+        document.getElementById('prism-tab-0')?.focus();
         navToTab(0);
     }
     
