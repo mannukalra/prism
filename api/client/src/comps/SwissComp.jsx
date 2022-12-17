@@ -39,12 +39,9 @@ function SwissComp(props) {
     const { page, seoTitle } = useContext(PageContext); 
 
     const navToHome = (event) => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-        // event.target.blur();
-        document.getElementById('prism-tab-0')?.focus();
+        document.getElementById('tabView0')?.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth',});
+        event.target.blur();
         navToTab(0);
     }
     
