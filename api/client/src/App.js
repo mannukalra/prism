@@ -5,6 +5,8 @@ import './App.css';
 import data from "./Config.json";
 import { useEffect, useState } from 'react';
 import { CommonContext } from './context/CommonContext';
+import Configure from './comps/Configure';
+import { Button } from '@mui/material';
 
 
 function links(data){
@@ -39,20 +41,42 @@ function routes(data, isMobile){
 }
 
 let PrismHome = (isMobile) => {
+  const [configureOpen, setConfigureOpen] = useState(false);
+  
+  function openConfigure(){
+    setConfigureOpen(true);
+  }
+
+  function closeConfigure(){
+    setConfigureOpen(false);
+  }
+
   return (
     <div className="App" style={{ width: isMobile ? 'fit-content' : 'auto' }} >
       <header className="App-header">
-        <p style={{marginLeft: '1rem'}}>
-          Welcome to PRISM
-        </p>
+        <img src={prismLogo} className="App-logo" alt="logo" />
+        <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
+          <p style={{marginLeft: '1rem'}}>
+            Welcome to PRISM
+          </p>
+          <div style={{color: "#61dafb"}}>
+            <Button variant="outlined" color="inherit" onClick={openConfigure} >Add Web Template</Button>
+          </div>
+        </div>
         <div className='Nav-items'>
+          <header>
+            <p>Origin</p>
+          </header>
           {links(data)}
         </div>
-        <img src={prismLogo} className="App-logo" alt="logo" />
-        <div style={{marginRight: '1rem'}}>
+        <div style={{marginLeft: '3rem', marginRight: '1rem'}}>
+          <header>
+            <p>DNS Fwded</p>
+          </header>
           {anchors(data)}
         </div>
       </header>
+      <Configure configureOpen={configureOpen} closeConfigure={closeConfigure}/>
     </div>
   );
 };
@@ -60,6 +84,7 @@ let PrismHome = (isMobile) => {
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
+
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
   }

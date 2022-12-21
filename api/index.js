@@ -21,6 +21,10 @@ module.exports = async function (context, req) {
             context.res = { status: 404, body: "Not Found.", headers: {}};  
         }
 
+    } else if (req.url.endsWith("/configtemplate")) {
+        data = await readFileAsync(__dirname + "/client/src/Config.json");
+        let jsonData = JSON.parse(data);
+        context.res = {status: 200, body: jsonData, headers: { 'Content-Type': "application/json" }};
     } else if (req.url.endsWith("/sendmail")) {
         context.log("sendmail -", JSON.stringify(req.body));
 
