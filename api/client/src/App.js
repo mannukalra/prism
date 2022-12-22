@@ -11,7 +11,7 @@ import { Button } from '@mui/material';
 
 function links(data){
   return Object.keys(data).map((item, index) => (
-    <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
+    <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem", alignContent: "left"}}>
       <Link className="App-link" to={"/api/"+item} target="_blank">
         {data[item].label}
       </Link>
@@ -56,7 +56,7 @@ let PrismHome = (isMobile) => {
       <header className="App-header">
         <img src={prismLogo} className="App-logo" alt="logo" />
         <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
-          <p style={{marginLeft: '1rem'}}>
+          <p>
             Welcome to PRISM
           </p>
           <div style={{color: "#61dafb"}}>
@@ -76,7 +76,7 @@ let PrismHome = (isMobile) => {
           {anchors(data)}
         </div>
       </header>
-      <Configure configureOpen={configureOpen} closeConfigure={closeConfigure}/>
+      {configureOpen && <Configure configureOpen={configureOpen} closeConfigure={closeConfigure}/>}
     </div>
   );
 };

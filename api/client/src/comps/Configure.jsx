@@ -55,7 +55,9 @@ function Configure(props) {
                     <ReactJson src={template} 
                         onEdit={updateTemplate} 
                         onAdd={updateTemplate}
-                        onDelete={updateTemplate} />
+                        onDelete={updateTemplate}
+                        displayDataTypes={false}
+                        displayObjectSize={false}/>
                 </Box>
             </DialogContent>
             <DialogActions>
