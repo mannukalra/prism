@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs, TextareaAutosize, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
 
@@ -23,10 +23,27 @@ async function getConfigTemplate() {
     // });
 }
 
+function a11yProps(index) {
+    return {
+      id: `prism-tab-${index}`,
+      'aria-controls': `prism-tabpanel-${index}`,
+    };
+}
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 
 function Configure(props) {
     const x = 100;
     const [template, setTemplate] = useState({});
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
         ( async() => {
@@ -39,25 +56,51 @@ function Configure(props) {
         setTemplate(result.updated_src);
     }
 
+    function updateTemplateFromRaw(e){
+        if(isJsonString(e.target.value)){
+            setTemplate(JSON.parse(e.target.value));
+        }else{
+            alert("invalid json")
+        }
+    }
+
     function getSampleConfig(){
         console.log("inside getSampleConfig");
         getConfigTemplate();
     }
+
+    const changeTab = (event, newSelection) => {
+        setSelectedIndex(newSelection);
+    };
+
     return (
-        <Dialog open={props.configureOpen} maxWidth='lg'>
+        <Dialog open={props.configureOpen} fullWidth maxWidth='lg'>
             <DialogTitle>Configure new Web Template</DialogTitle>
             <DialogContent>
-                <Box
-                    component="form"
-                    sx={{ '& .MuiTextField-root': { m: 1.2, width: '42ch' },
+                <Box component="form"
+                    sx={{ '& .MuiTextField-root': { m: 1.2 },
                         display: 'flex', flexDirection: 'column' }} >
                     <TextField id="outlined-name" label="Name" name="name" value={x} required />
-                    <ReactJson src={template} 
-                        onEdit={updateTemplate} 
-                        onAdd={updateTemplate}
-                        onDelete={updateTemplate}
-                        displayDataTypes={false}
-                        displayObjectSize={false}/>
+                    <Tabs value={selectedIndex} onChange={changeTab} aria-label="Json editor tabs" 
+                        sx={{marginBottom: "7px" }} >
+                        <Tab label="Json" key={0} {...a11yProps(0)}/>
+                        <Tab label="Raw" key={1} {...a11yProps(1)}/>
+                    </Tabs>
+                    <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 0}>
+                        <ReactJson src={template} 
+                            onEdit={updateTemplate} 
+                            onAdd={updateTemplate}
+                            onDelete={updateTemplate}
+                            displayDataTypes={false}
+                            displayObjectSize={false}/>
+                    </div>
+                    <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 1}>
+                        <pre>
+                        <TextField id="outlined-multiline-flexible" label="config json raw" name="plain editor"
+                            value={JSON.stringify(template, null, 2)} inputProps={{style: {fontSize: 12}}}
+                            onChange={updateTemplateFromRaw} fullWidth multiline />
+                        </pre>
+                    </div>
                 </Box>
             </DialogContent>
             <DialogActions>
