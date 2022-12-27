@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs, TextareaAutosize, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
 
@@ -44,6 +44,7 @@ function Configure(props) {
     const x = 100;
     const [template, setTemplate] = useState({});
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [errorText, setErrorText] = useState(null);
 
     useEffect(() => {
         ( async() => {
@@ -59,8 +60,9 @@ function Configure(props) {
     function updateTemplateFromRaw(e){
         if(isJsonString(e.target.value)){
             setTemplate(JSON.parse(e.target.value));
+            setErrorText(null);
         }else{
-            alert("invalid json")
+            setErrorText("Invalid Input Attempt!");
         }
     }
 
@@ -96,7 +98,9 @@ function Configure(props) {
                     </div>
                     <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 1}>
                         <pre>
-                        <TextField id="outlined-multiline-flexible" label="config json raw" name="plain editor"
+                        <TextField id="outlined-multiline-flexible" label="At your own risk" name="plain editor"
+                            error= {errorText}
+                            helperText= {errorText}
                             value={JSON.stringify(template, null, 2)} inputProps={{style: {fontSize: 12}}}
                             onChange={updateTemplateFromRaw} fullWidth multiline />
                         </pre>

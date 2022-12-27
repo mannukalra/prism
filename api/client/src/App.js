@@ -2,12 +2,14 @@ import Prism from './comps/Prism';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import prismLogo from './prism.png';
 import './App.css';
-import data from "./Config.json";
+import main from "./config/Config.json";
+import template from "./config/Template.json";
 import { useEffect, useState } from 'react';
 import { CommonContext } from './context/CommonContext';
 import Configure from './comps/Configure';
 import { Button } from '@mui/material';
 
+const data = Object.assign(main, template); 
 
 function links(data){
   return Object.keys(data).map((item, index) => (
@@ -22,7 +24,7 @@ function links(data){
 function anchors(data){
   return Object.keys(data).map((item, index) => (
     <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
-      <a className="App-link" href={data[item].url} target="_blank" rel="noopener noreferrer">
+      <a className="App-link" href={ data[item].url ? data[item].url : null } target="_blank" rel="noopener noreferrer">
         {data[item].label}
       </a>
     </div>

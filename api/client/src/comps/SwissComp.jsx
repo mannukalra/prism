@@ -16,7 +16,7 @@ function textItems(list){
 
 function cardItems(list, page){
     return list.map((item, index) => (
-        <Card key={index} sx={{ margin: ".5rem", width: item.src ? "84%": "44%" }}>
+        <Card key={index} sx={{ margin: ".5rem", width: item.src ? item.width ? item.width : "84%": "44%" }}>
             <CardHeader
                 title={item.label}
                 subheader={item.desc}
@@ -56,13 +56,16 @@ function SwissComp(props) {
       >
         {(
             tab.bgImage ? 
-            <FullImageCard tab={tab} logoColor={logoColor} /> :
+            <FullImageCard tab={tab} logoColor={logoColor} page={page} /> :
             <Card sx={{ background: "#E7EBF0", margin: ".7rem" }}>
                 <Typography variant="h4" color="text.secondary" sx={{ marginLeft: "3rem", marginTop: "1rem"}}>
                     {tab.name}
                 </Typography>
                 <CardContent>
-                    { tab.content && <Typography variant="h4" color="text.secondary" component="div" marginLeft="3rem">{ tab.content }</Typography> }
+                    { tab.content && <Typography variant="h4" color="text.secondary" 
+                        component="div" marginLeft="3rem" sx={{whiteSpace: "pre-line"}}>
+                        { tab.content }
+                    </Typography> }
                     <Grid container 
                             direction={tab.direction ? tab.direction : "column"}
                             alignItems="center"

@@ -87,7 +87,7 @@ function Prism(props) {
                 <Container maxWidth="xl" display="flex">
                     <Box display={"flex"} sx={{justify: "space-between"}} >
                         <Tooltip title={config.label}>
-                            <Box component="img" sx={{ height: 84, margin: '7px' }} alt="logo" src={require("../img/"+config.logo)} />
+                            <Box component="img" sx={{ height: 84, margin: '7px' }} alt="logo" src={require("../img/"+props.page+"/"+config.logo)} />
                         </Tooltip>
                         <Box sx={{ width: '100%', margin: '2.4rem', borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={selectedIndex} onChange={handleChange}

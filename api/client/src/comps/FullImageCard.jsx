@@ -6,7 +6,7 @@ import Connect from "./Connect";
 
 function FullImageCard(props){
     const [connectOpen, setConnectOpen] = useState(false);
-    const { tab, logoColor } = props;
+    const { tab, logoColor, page } = props;
 
     const handleOpenConnect = () => {
         setConnectOpen(true);
@@ -20,7 +20,7 @@ function FullImageCard(props){
         <Card sx={{position: "relative", margin: ".7rem" }}>
             <CardMedia
                 component="img"
-                image={require("../img/"+tab.bgImage)}
+                image={require("../img/"+page+"/"+tab.bgImage)}
                 alt="green iguana"
                 sx={{position: "absolute", width: "100%", minHeight: "76vh" }}
             />

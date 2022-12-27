@@ -22,7 +22,7 @@ module.exports = async function (context, req) {
         }
 
     } else if (req.url.endsWith("/configtemplate")) {
-        data = await readFileAsync(__dirname + "/client/src/Config.json");
+        data = await readFileAsync(__dirname + "/client/src/config/Template.json");
         let jsonData = JSON.parse(data);
         context.res = {status: 200, body: jsonData, headers: { 'Content-Type': "application/json" }};
     } else if (req.url.endsWith("/sendmail")) {
