@@ -22,9 +22,24 @@ module.exports = async function (context, req) {
         }
 
     } else if (req.url.endsWith("/configtemplate")) {
+
         data = await readFileAsync(__dirname + "/client/src/config/Template.json");
         let jsonData = JSON.parse(data);
         context.res = {status: 200, body: jsonData, headers: { 'Content-Type': "application/json" }};
+    } else if (req.url.endsWith("/updatetemplate") && req.body) {
+
+        let templatesStr = await readFileAsync(__dirname + "/client/src/config/Temp.json");
+        let templates = JSON.parse(templatesStr);
+
+        // read raw body
+        const mergedTemplates = Object.assign(templates, req.body);
+        try {
+            fs.writeFileSync(__dirname + "/client/src/config/Temp.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
+            context.res = { status: 200, body:{ message: 'Updated template entry successfully '}};
+        } catch(err) {
+            console.error(err);
+            context.res = { status: 400, body:{ message: 'Failed to write to template file, err- '+err} };
+        }
     } else if (req.url.endsWith("/sendmail")) {
         context.log("sendmail -", JSON.stringify(req.body));
 

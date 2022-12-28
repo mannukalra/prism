@@ -23,6 +23,18 @@ async function getConfigTemplate() {
     // });
 }
 
+function publishTemplate(template, file){ 
+    const formData = new FormData();
+    formData.append('template', JSON.stringify(template));
+    formData.append('file', file,  Object.keys(template)[0]+".zip");
+
+    fetch('/api/updatetemplate', {
+        method: 'post',
+        headers: {'Content-Type': 'multipart/form-data', 'Accept': 'application/json', 'type':'formData'},
+        body: formData
+    });
+};
+
 function a11yProps(index) {
     return {
       id: `prism-tab-${index}`,
@@ -41,10 +53,10 @@ function isJsonString(str) {
 
 
 function Configure(props) {
-    const x = 100;
     const [template, setTemplate] = useState({});
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [errorText, setErrorText] = useState(null);
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         ( async() => {
@@ -66,6 +78,14 @@ function Configure(props) {
         }
     }
 
+    const handleCapture = ( e ) => {
+        setFile(e.target.files[0]);
+    };
+
+    function triggerPublish(){
+        publishTemplate(template, file);
+    }
+
     function getSampleConfig(){
         console.log("inside getSampleConfig");
         getConfigTemplate();
@@ -82,9 +102,7 @@ function Configure(props) {
                 <Box component="form"
                     sx={{ '& .MuiTextField-root': { m: 1.2 },
                         display: 'flex', flexDirection: 'column' }} >
-                    <TextField id="outlined-name" label="Name" name="name" value={x} required />
-                    <Tabs value={selectedIndex} onChange={changeTab} aria-label="Json editor tabs" 
-                        sx={{marginBottom: "7px" }} >
+                    <Tabs value={selectedIndex} onChange={changeTab} aria-label="Json editor tabs" >
                         <Tab label="Json" key={0} {...a11yProps(0)}/>
                         <Tab label="Raw" key={1} {...a11yProps(1)}/>
                     </Tabs>
@@ -94,7 +112,8 @@ function Configure(props) {
                             onAdd={updateTemplate}
                             onDelete={updateTemplate}
                             displayDataTypes={false}
-                            displayObjectSize={false}/>
+                            displayObjectSize={false}
+                            style={{ marginTop: "1rem" }}/>
                     </div>
                     <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 1}>
                         <pre>
@@ -109,7 +128,12 @@ function Configure(props) {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="inherit" onClick={props.closeConfigure} >Cancel</Button>
-                <Button variant="outlined" color="inherit" onClick={getSampleConfig} >Validate</Button>
+                <Button variant="outlined" color="inherit" component="label"
+                    sx={{ marginLeft: "3rem" }}
+                    >Select File
+                    <input type="file" hidden onChange={handleCapture} />
+                </Button>
+                <Button variant="outlined" color="inherit" onClick={triggerPublish} >Publish</Button>
             </DialogActions>
         </Dialog>
     );

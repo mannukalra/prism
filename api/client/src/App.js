@@ -4,12 +4,14 @@ import prismLogo from './prism.png';
 import './App.css';
 import main from "./config/Config.json";
 import template from "./config/Template.json";
-import { useEffect, useState } from 'react';
+import temp from "./config/Temp.json";
+import { useState } from 'react';
 import { CommonContext } from './context/CommonContext';
 import Configure from './comps/Configure';
 import { Button } from '@mui/material';
+import { isMobile } from "react-device-detect";
 
-const data = Object.assign(main, template); 
+const data = Object.assign(main, template, temp);
 
 function links(data){
   return Object.keys(data).map((item, index) => (
@@ -31,7 +33,7 @@ function anchors(data){
   ));
 }
 
-function routes(data, isMobile){
+function routes(data){
   return Object.keys(data).map((item, index) => (
       <Route key={"prism-home-"+index} path={"/api/"+item} 
         element={
@@ -42,7 +44,7 @@ function routes(data, isMobile){
   ));
 }
 
-let PrismHome = (isMobile) => {
+let PrismHome = () => {
   const [configureOpen, setConfigureOpen] = useState(false);
   
   function openConfigure(){
@@ -85,25 +87,11 @@ let PrismHome = (isMobile) => {
 
 
 function App() {
-  const [width, setWidth] = useState(window.innerWidth);
-
-  function handleWindowSizeChange() {
-      setWidth(window.innerWidth);
-  }
-  useEffect(() => {
-      window.addEventListener('resize', handleWindowSizeChange);
-      return () => {
-          window.removeEventListener('resize', handleWindowSizeChange);
-      }
-  }, []);
-
-  const isMobile = width <= 840;
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route key="prism-home" path="/api" element={PrismHome(isMobile)} />
-        {routes(data, isMobile)}
+        <Route key="prism-home" path="/api" element={PrismHome()} />
+        {routes(data)}
       </Routes>
     </BrowserRouter>
   );
