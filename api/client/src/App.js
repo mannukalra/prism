@@ -4,14 +4,13 @@ import prismLogo from './prism.png';
 import './App.css';
 import main from "./config/Config.json";
 import template from "./config/Template.json";
-import temp from "./config/Temp.json";
 import { useState } from 'react';
 import { CommonContext } from './context/CommonContext';
 import Configure from './comps/Configure';
 import { Button } from '@mui/material';
 import { isMobile } from "react-device-detect";
 
-const data = Object.assign(main, template, temp);
+const data = Object.assign(main, template);
 
 function links(data){
   return Object.keys(data).map((item, index) => (

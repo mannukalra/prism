@@ -16,7 +16,7 @@ function textItems(list){
 
 function cardItems(list, page){
     return list.map((item, index) => (
-        <Card key={index} sx={{ margin: ".5rem", width: item.src ? item.width ? item.width : "84%": "44%" }}>
+        <Card key={index} sx={{ margin: ".5rem", width: item.src ? item.width || "84%" : item.width || "44%" }}>
             <CardHeader
                 title={item.label}
                 subheader={item.desc}
@@ -25,7 +25,7 @@ function cardItems(list, page){
                 <CardMedia component="iframe" title={item.label} height="300" src={item.src} allowFullScreen="allowFullScreen" frameBorder="0" />
               : <CardMedia
                     component="img"
-                    height="300"
+                    height={item.height || "300"}
                     image={require("../img/"+page+"/"+item.image)}
                     alt="Paella dish"
                 />
