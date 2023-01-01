@@ -36,19 +36,20 @@ module.exports = async function (context, req) {
         });
         context.res = {status: 200, body: templatesInfo, headers: { 'Content-Type': "application/json" }};
     } else if (req.url.endsWith("/updatetemplate") && req.body) {
-
-        let templatesStr = await readFileAsync(__dirname + "/client/src/config/Template.json");
-        let templates = JSON.parse(templatesStr);
-
-        // read raw body
-        readFormData(req);
-        const mergedTemplates = Object.assign(templates, req.body);
-        try {
-            fs.writeFileSync(__dirname + "/client/src/config/Temp.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
-            context.res = { status: 200, body:{ message: 'Updated template entry successfully '}};
-        } catch(err) {
-            console.error(err);
-            context.res = { status: 400, body:{ message: 'Failed to write to template file, err- '+err} };
+        
+        const result = processFormData(req); // read raw body
+        if(result && result['template']){
+            let templatesStr = await readFileAsync(__dirname + "/client/src/config/Template.json");
+            let templates = JSON.parse(templatesStr);
+            
+            const mergedTemplates = Object.assign(templates, result['template']);
+            try {
+                fs.writeFileSync(__dirname + "/client/src/config/Template.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
+                context.res = { status: 200, body:{ message: 'Updated template entry successfully '}};
+            } catch(err) {
+                console.error(err);
+                context.res = { status: 400, body:{ message: 'Failed to write to template file, err- '+err} };
+            }
         }
     } else if (req.url.endsWith("/sendmail")) {
         context.log("sendmail -", JSON.stringify(req.body));
@@ -107,14 +108,25 @@ function getMatching(item, regex, index) {
     return null;
 }
 
-function readFormData(request){
+function ensureDirectoryExistence(filePath) {
+    fs.mkdir(filePath, { recursive: true }, (err) => {
+        if(err){
+            console.log("dir already exists!");
+        }
+    });
+}
+
+function processFormData(request){
     let contentType = request.headers['content-type'];
     const contentTypeArray = contentType.split(';').map(item => item.trim());
     const boundaryPrefix = 'boundary=';
     let boundary = contentTypeArray.find(item => item.startsWith(boundaryPrefix));
+    let result = null;
+    let endPoint = null;
     if (boundary){
         boundary = boundary.slice(boundaryPrefix.length).trim();
-        let result = {}
+        result = {}
+        let dirCreated = false;
         const rawDataArray = request.rawBody.split(boundary)
         for (let item of rawDataArray) {
             let contentType = getMatching(item, /(?:Content-Type:)(.*?)(?:\r\n)/);
@@ -127,17 +139,29 @@ function readFormData(request){
             if(contentType.includes('application/json')){
                 let name = getMatching(item, /(?:name=")(.+?)(?:")/);
                 if(name && name == 'template'){
-                    //parse value to json
-                    console.log("value "+ value);
+                    console.log("template "+ value);
+                    result['template'] = JSON.parse(value);
+                    endPoint = Object.keys(result['template'])[0];
                 }
-            }else if(contentType.includes('image/') || contentType.includes('zip')){
+            }else if(contentType.includes('image/')){
                 let filename = getMatching(item, /(?:filename=")(.*?)(?:")/)
-                if (filename && (filename = filename.trim())) {
+                if (filename && endPoint) {
                     console.log("filename "+filename);
+                    var buf = Buffer.from(value, 'base64');
+                    let targetDir = __dirname + "/client/src/img/"+endPoint;
+                    if(!dirCreated){
+                        ensureDirectoryExistence(targetDir);
+                        dirCreated = true;
+                    }
+                    fs.writeFileSync(targetDir+"/"+filename, buf);
+                    //TODO writted file in corrupt?
                 }
-            }  
+            }else if(contentType.includes('zip')){
+                //TODO copy and extract zip + cleanup
+            }
         }
     }
+    return result;
     
 }
 

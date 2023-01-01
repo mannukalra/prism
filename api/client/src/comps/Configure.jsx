@@ -25,14 +25,13 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
-function publishTemplate(template, files){ 
+function publishTemplate(endPoint, template, files){ 
     const formData = new FormData();
-    formData.append('template', new Blob([JSON.stringify(template)], {type: "application/json"}));
+    formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
     for(let i in files) {
-        formData.append('images', files[i]); // appending image one by one for the same key
+        formData.append('images', files[i]); // appending all attachments for same key
     };
-    // formData.append('file', file,  Object.keys(template)[0]+".zip");
 
     fetch('/api/updatetemplate', {
         method: 'post',
@@ -59,7 +58,7 @@ function isJsonString(str) {
 
 
 function Configure(props) {
-    const [endpoint, setEndpoint] = useState('demo');
+    const [endPoint, setEndPoint] = useState('');
     const [templatesInfo, setTemplatesInfo] = useState([{ 'ss': 'Save Our Soil'}]);
     const [sourceTemplateEP, setSourceTemplateEP] = useState('ss');
     const [template, setTemplate] = useState({});
@@ -70,8 +69,8 @@ function Configure(props) {
     function handleChange(e) {
         const { name, value } = e.target;
         switch (name) {
-            case 'endpoint':
-                setEndpoint(value);
+            case 'endPoint':
+                setEndPoint(value);
                 break;
             case 'sourceTemplateEP':
                 setSourceTemplateEP(value);
@@ -110,12 +109,7 @@ function Configure(props) {
     };
 
     function triggerPublish(){
-        publishTemplate(template, files);
-    }
-
-    function getSampleConfig(){
-        console.log("inside getSampleConfig");
-        fetchConfigTemplate();
+        publishTemplate(endPoint, template, files);
     }
 
     const changeTab = (event, newSelection) => {
@@ -144,8 +138,8 @@ function Configure(props) {
                                 ))}
                         </TextField>
                         <Link href={'/api/'+sourceTemplateEP} target='_blank' variant='caption' >Refer</Link>
-                        <TextField id="outlined-endpoint" label="Your EndPoint" name="endpoint" size="small"
-                            value={endpoint} onChange={handleChange} sx={{height: '0.5rem'}} required />
+                        <TextField id="outlined-endpoint" label="Your EndPoint" name="endPoint" size="small"
+                            value={endPoint} onChange={handleChange} sx={{height: '0.5rem'}} required />
                     </Grid>
                     <Grid style={{marginTop: '3rem'}}>
                         <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 0}>
