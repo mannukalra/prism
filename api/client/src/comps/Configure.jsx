@@ -90,7 +90,7 @@ function Configure(props) {
             const templ = await fetchConfigTemplate(sourceTemplateEP);
             setTemplate(templ);
         })();
-    }, []);
+    });
 
     function updateTemplate(result){
         setTemplate(result.updated_src);
