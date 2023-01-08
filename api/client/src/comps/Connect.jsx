@@ -74,7 +74,7 @@ function Connect(props) {
 
     return (
         <Dialog open={props.open} onClose={props.handleClose} maxWidth='lg'>
-            <DialogTitle>{props.label}</DialogTitle>
+            <DialogTitle>{ props.tab.connectLabel || "Share below details to connect with us" }</DialogTitle>
             <DialogContent>
                 <Box
                     component="form"
@@ -89,7 +89,7 @@ function Connect(props) {
                         rows={8} value={mailContent.query} onChange={handleChange} multiline />
                 </Box>
             </DialogContent>
-            <DialogActions sx={{color: props.logoColor}}>
+            <DialogActions sx={{color: props.themeColor}}>
                 <Button variant="outlined" color="inherit" onClick={props.handleClose}>Cancel</Button>
                 <Button variant="outlined" color="inherit" onClick={enquire}>Connect</Button>
             </DialogActions>

@@ -35,7 +35,7 @@ function cardItems(list, page){
 }
 
 function SwissComp(props) {
-    const { tab, selectedIndex, currIndex, logoColor, navToTab, itemRef, isLastItem, appBarBGColor, ...other } = props;
+    const { tab, selectedIndex, currIndex, themeColor, navToTab, itemRef, isLastItem, appBarBGColor, ...other } = props;
     const { page, seoTitle } = useContext(PageContext); 
 
     const navToHome = (event) => {
@@ -56,7 +56,7 @@ function SwissComp(props) {
       >
         {(
             tab.bgImage ? 
-            <FullImageCard tab={tab} logoColor={logoColor} page={page} /> :
+            <FullImageCard tab={tab} themeColor={themeColor} page={page} /> :
             <Card sx={{ background: "#E7EBF0", margin: ".7rem" }}>
                 <Typography variant="h4" color="text.secondary" sx={{ marginLeft: "3rem", marginTop: "1rem"}}>
                     {tab.name}
@@ -78,7 +78,7 @@ function SwissComp(props) {
                 { isLastItem &&
                     <>
                         <CardActions sx={{alignItems: "center", justifyContent: "center"}}>
-                            <Button size="xlarge" sx={{color: logoColor, marginBottom: '1.5rem', fontSize: '18px', cursor: 'pointer'}} onClick={navToHome}>Scroll Top</Button>
+                            <Button size="xlarge" sx={{color: themeColor, marginBottom: '1.5rem', fontSize: '18px', cursor: 'pointer'}} onClick={navToHome}>Scroll Top</Button>
                         </CardActions>
                         <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: appBarBGColor }}>
                             <Typography variant="caption" align="center" >&copy;{"2022 "+seoTitle+"."}</Typography>

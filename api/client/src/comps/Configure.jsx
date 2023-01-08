@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Link, MenuItem, Tab, Tabs, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Link, MenuItem, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
 
@@ -30,12 +30,13 @@ function publishTemplate(endPoint, template, files){
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
     for(let i in files) {
-        formData.append('images', files[i]); // appending all attachments for same key
+        if(typeof files[i] === 'object'){
+            formData.append('images', files[i]); // appending all attachments as images
+        }
     };
-
-    fetch('/api/updatetemplate', {
+    let url = "/api/updatetemplate?ep="+endPoint;
+    fetch(url, {
         method: 'post',
-        headers: {'Accept': 'application/json', 'type':'formData'},
         body: formData
     });
 };
@@ -118,10 +119,14 @@ function Configure(props) {
 
     return (
         <Dialog open={props.configureOpen} fullWidth maxWidth='lg'>
-            <DialogTitle>Configure new Web Template</DialogTitle>
+            <DialogTitle>
+                <Tooltip placement="top-start"
+                    title={<h1>Edit below json content as per your requirements, select multiple images or single zip file with all images and PUBLISH.</h1>}>
+                    <p>Configure new Web Template</p>
+                </Tooltip>
+            </DialogTitle>
             <DialogContent>
-                <Box component="form"
-                    sx={{ '& .MuiTextField-root': { m: 1.2 },
+                <Box component="form" sx={{ '& .MuiTextField-root': { m: 1.2 },
                         display: 'flex', flexDirection: 'column' }} >
                     <Grid container direction='row' sx={{position: 'fixed', height: '42px'}} >
                         <Tabs value={selectedIndex} onChange={changeTab} aria-label="Json editor tabs" >
@@ -165,12 +170,16 @@ function Configure(props) {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="inherit" onClick={props.closeConfigure} >Cancel</Button>
-                <Button variant="outlined" color="inherit" component="label"
-                    sx={{ marginLeft: "3rem" }}
-                    >Select File
-                    <input type="file" hidden multiple accept='application/zip, image/jpeg, image/png' onChange={handleCapture} />
-                </Button>
-                <Button variant="outlined" color="inherit" onClick={triggerPublish} >Publish</Button>
+                <Tooltip title="Select multiple image files or a single zip file with all images">
+                    <Button variant="outlined" color="inherit" component="label"
+                        sx={{ marginLeft: "3rem" }}
+                    >Select Images
+                        <input type="file" hidden multiple accept='application/zip, image/jpeg, image/png' acceptCharset='UTF-8' onChange={handleCapture} />
+                    </Button>
+                </Tooltip>
+                <Tooltip title="Will deploy your website, may take few mintues before you could try it out.">
+                    <Button variant="outlined" color="inherit" onClick={triggerPublish} >Publish</Button>
+                </Tooltip>
             </DialogActions>
         </Dialog>
     );

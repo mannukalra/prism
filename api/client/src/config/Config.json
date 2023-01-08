@@ -3,7 +3,7 @@
         "label": "Save Our Soil",
         "appBarBGColor": "#012572",
         "logo": "ss-logo.png",
-        "logoColor": "#C7E0F7",
+        "themeColor": "#C7E0F7",
         "url": "",
         "phone": "8300083111",
         "seoTitle": "Isha Outreach",
@@ -12,7 +12,8 @@
             {"name": "Home", "content": "A global endeavor to make humanity come together for future of all life and our planet.", 
                 "bgImage": "ss-home-bg.png", "connectText": "Join the Movement",
                 "to":["info@consciousplanet.org", "info@ishafoundation.org"],
-                "cc": ["mannu.kalra29@gmail.com"]
+                "cc": ["mannu.kalra29@gmail.com"],
+                "connectLabel": "Get in touch for queries"
             },
             {"name": "Planet",
                 "cardItems": [{"label": "Healthy Planet", "desc": "Choices what we make now will decide our future.", "image": "ss-service1.png"},
@@ -38,7 +39,7 @@
         "label": "P&BC",
         "appBarBGColor": "#F7BF50",
         "logo": "pnbc-logo.png",
-        "logoColor": "#82B04D",
+        "themeColor": "#82B04D",
         "url": "http://pnbc.in",
         "phone": "9316066111",
         "seoTitle": "Pest and bug control",
@@ -47,7 +48,8 @@
             {"name": "Home", "content": "Light & Effective way to control pest!", 
                 "bgImage": "pnbc-home-bg.jpg", "connectText": "Contact Us",
                 "to":["pestbugcontrol@gmail.com", "tarsem.tps@gmail.com"],
-                "cc": ["mannu.kalra29@gmail.com"]
+                "cc": ["mannu.kalra29@gmail.com"],
+                "connectLabel": "Get in touch for queries or estimates"
             },
             {"name": "Services",
                 "cardItems": [{"label": "Mosquito Control", "desc": "Helps you repel mosquitoes from your homes, office spaces and surroundings.", "image": "mosquito-control.jpg"},
@@ -70,7 +72,7 @@
         "label": "Simar & Hunar",
         "appBarBGColor": "#F0914D",
         "logo": "SimarHunar-logo.jpeg",
-        "logoColor": "#B7A68E",
+        "themeColor": "#B7A68E",
         "url": "",
         "phone": "7349471124",
         "seoTitle": "Simar & Hunar",
@@ -79,7 +81,8 @@
             {"name": "Home", "content": "Waiting for her!", 
                 "bgImage": "simarhunar-home-bg.jpg", "connectText": "Contact Us",
                 "to":["sindhuja.asingh123@gmail.com", "sindhuja.asingh@yahoo.co.in"],
-                "cc": ["mannu.kalra29@gmail.com"]
+                "cc": ["mannu.kalra29@gmail.com"],
+                "connectLabel": "Get in touch with us"
             },
             {"name": "Memories",
                 "cardItems": [{"label": "Simar solo", "desc": "Welcome Simar!", "image": "sim01.jpeg"},
@@ -101,7 +104,7 @@
         "label": "O2S",
         "appBarBGColor": "#002F6C",
         "logo": "o2s-logo.png",
-        "logoColor": "#F7BF50",
+        "themeColor": "#F7BF50",
         "url": "http://o2s.life",
         "phone": "7795593093",
         "seoTitle": "Open Observability simplified",
@@ -110,7 +113,8 @@
             {"name": "Home", "content": "Observability simplified!", 
                 "bgImage": "o2s-home-bg.jpg", "connectText": "Connect to observe",
                 "to":["mkmandeepkalra@gmail.com"],
-                "cc": ["mannu.kalra29@gmail.com"]
+                "cc": ["mannu.kalra29@gmail.com"],
+                "connectLabel": "Get in touch for queries or estimates"
             },
             {"name": "Services", "content": "Wait for it.."},
             {"name": "About Us", "content": "Wait for this one too... )"}

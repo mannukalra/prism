@@ -7,7 +7,7 @@ import template from "./config/Template.json";
 import { useState } from 'react';
 import { CommonContext } from './context/CommonContext';
 import Configure from './comps/Configure';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { isMobile } from "react-device-detect";
 
 const data = Object.assign(main, template);
@@ -26,7 +26,7 @@ function anchors(data){
   return Object.keys(data).map((item, index) => (
     <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem"}}>
       <a className="App-link" href={ data[item].url ? data[item].url : null } target="_blank" rel="noopener noreferrer">
-        {data[item].label}
+        { data[item].url ? data[item].label : '-'}
       </a>
     </div>
   ));
@@ -63,7 +63,9 @@ let PrismHome = () => {
             Welcome to PRISM
           </p>
           <div style={{color: "#61dafb"}}>
-            <Button variant="outlined" color="inherit" onClick={openConfigure} >Add Web Template</Button>
+            <Tooltip title="Refer existing site templates and build your own in two simple steps.">
+              <Button variant="outlined" color="inherit" onClick={openConfigure} >Build your own website</Button>
+            </Tooltip>
           </div>
         </div>
         <div className='Nav-items'>
