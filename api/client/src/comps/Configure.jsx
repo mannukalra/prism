@@ -39,6 +39,7 @@ function publishTemplate(endPoint, template, files){
         method: 'post',
         body: formData
     });
+    //TODO handle response
 };
 
 function a11yProps(index) {
@@ -90,7 +91,7 @@ function Configure(props) {
             const templ = await fetchConfigTemplate(sourceTemplateEP);
             setTemplate(templ);
         })();
-    });
+    }, [sourceTemplateEP]);
 
     function updateTemplate(result){
         setTemplate(result.updated_src);

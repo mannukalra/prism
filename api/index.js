@@ -7,7 +7,7 @@ const multipart = require('parse-multipart-data');
 const {execSync} = require('child_process');
 
 //TODO read from config
-const endPoints = ['/api', '/pnbc', '/o2s', '/simarhunar', '/o2s2'];
+const endPoints = ['/api', '/pnbc', '/o2s', '/simarhunar', 'ss', '/o2s2'];
 
 
 module.exports = async function (context, req) {
