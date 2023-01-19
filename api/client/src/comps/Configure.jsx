@@ -25,7 +25,7 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
-function publishTemplate(endPoint, template, files){ 
+function publishTemplate(endPoint, template, files, closeConfigure){ 
     const formData = new FormData();
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
@@ -35,11 +35,23 @@ function publishTemplate(endPoint, template, files){
         }
     };
     let url = "/api/updatetemplate?ep="+endPoint;
-    fetch(url, {
-        method: 'post',
-        body: formData
+    fetch(url, { method: 'post', body: formData})
+        .then(response => response.json())
+        .then(data  =>{
+            console.log(data)
+            if('message' in data){
+                if(data['message'].includes("successfully")){
+                    closeConfigure();   
+                }
+                alert(data['message']);
+            }else{
+                alert("Failed to deploy your template, refer logs for details!");
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            alert("Some error occured while deployment, refer logs for details!");
     });
-    //TODO handle response
 };
 
 function a11yProps(index) {
@@ -111,7 +123,7 @@ function Configure(props) {
     };
 
     function triggerPublish(){
-        publishTemplate(endPoint, template, files);
+        publishTemplate(endPoint, template, files, props.closeConfigure);
     }
 
     const changeTab = (event, newSelection) => {

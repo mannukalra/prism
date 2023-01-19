@@ -4,20 +4,22 @@ const nodemailer = require('nodemailer')
 const util = require('util');
 const readFileAsync = util.promisify(fs.readFile);
 const multipart = require('parse-multipart-data');
-const {execSync} = require('child_process');
+const { spawn } = require("child_process");
 
 //TODO read from config
-const endPoints = ['/api', '/pnbc', '/o2s', '/simarhunar', 'ss', '/o2s2'];
+const endPoints = ['/api', '/pnbc', '/o2s', '/simarhunar', '/ss', '/o2s2'];
 
 
 module.exports = async function (context, req) {
     let file = "index.html"
     let data;
+    let buildDir = await getVar('BUILD_DIR') || 'build';
+    console.log("Current build dir - "+buildDir);
 
     if (endPoints.some((ep) => req.url.endsWith(ep))) {
         try {
-            data = await readFileAsync(__dirname + "/client/build/" + file);
-            context.log('GET ' + __dirname + "/client/build/" + file);
+            data = await readFileAsync(__dirname + "/client/"+buildDir+"/" + file);
+            context.log('GET ' + __dirname + "/client/"+buildDir+"/" + file);
             let contentType = mime.lookup(file)
             context.res = { status: 200, body: data, isRaw: true, headers: { 'Content-Type': contentType } };
         } catch (err) {
@@ -41,23 +43,26 @@ module.exports = async function (context, req) {
         context.res = { status: 200, body: templatesInfo, headers: { 'Content-Type': "application/json" } };
     } else if (req.url.includes("/updatetemplate?ep=") && req.body) {
 
-        const result = processFormData(req); // read raw body
-        if (result && result['template']) {
-            let templatesStr = await readFileAsync(__dirname + "/client/src/config/Template.json");
-            let templates = JSON.parse(templatesStr);
+        if(buildDir === 'build'){ // if build_bkp then prev build already in progress
+            const result = processFormData(req); // read body and copy images
+            if (result && result['template']) {
+                let templatesStr = await readFileAsync(__dirname + "/client/src/config/Template.json");
+                let templates = JSON.parse(templatesStr);
 
-            const mergedTemplates = Object.assign(templates, result['template']);
-            try {
-                fs.writeFileSync(__dirname + "/client/src/config/Template.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
-                console.log('Updated template entry successfully');
-                
-                execSync('npm run build --prefix "'+__dirname + '/client/"');//, {stdio: 'inherit'});
-                console.log('Deployed the build successfully');
-                context.res = { status: 200, body: { message: 'Deployed your build successfully' } };
-            } catch (err) {
-                console.error(err);
-                context.res = { status: 400, body: { message: 'Failed to deploy site, err- ' + err } };
+                const mergedTemplates = Object.assign(templates, result['template']);
+                try {
+                    await fs.writeFileSync(__dirname + "/client/src/config/Template.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
+                    console.log('Updated template entry successfully');
+                    
+                    await deployBuild(req.query['ep']);
+                    context.res = { status: 200, body: { message: 'Deployed your build successfully' } };
+                } catch (err) {
+                    console.error(err);
+                    context.res = { status: 400, body: { message: 'Failed to deploy site, err- ' + err } };
+                }
             }
+        }else{
+            context.res = { status: 400, body: { message: 'Failed, previous deployment in progress, please try after few minutes!' } };
         }
     } else if (req.url.endsWith("/sendmail")) {
         context.log("sendmail -", JSON.stringify(req.body));
@@ -94,8 +99,8 @@ module.exports = async function (context, req) {
 
         file = req.url.substring(req.url.indexOf("/api/") + 5);
         try {
-            data = await readFileAsync(__dirname + "/client/build/" + file);
-            // context.log('GET ' + __dirname + "/client/build/" +  file);
+            data = await readFileAsync(__dirname + "/client/"+buildDir+"/" + file);
+            // context.log('GET ' + __dirname + "/client/"+buildDir+"/" +  file);
             var contentType = mime.lookup(file)
             context.res = { status: 200, body: data, isRaw: true, headers: { 'Content-Type': contentType } };
         } catch (err) {
@@ -104,6 +109,40 @@ module.exports = async function (context, req) {
         }
 
     }
+}
+
+async function deployBuild(template){
+    if(fs.existsSync(__dirname + "/client/build") && await getVar('BUILD_DIR') == 'build'){
+        fs.rmSync(__dirname + "/client/build_bkp", { recursive: true, force: true });
+
+        fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", async (err) => {
+            if (err) {
+                console.log("failed to rename build dir "+err)
+                return;
+            }
+        });
+    }
+
+    await setVar('BUILD_DIR', 'build_bkp');
+    console.log('Triggered Deployment for template '+template);
+    const child = spawn('npm run build --prefix "'+__dirname + '/client/"', {shell: true});
+    
+    child.on('exit', (code) => {
+        if(code == 0){
+            setVar('BUILD_DIR', 'build');
+        }else if(fs.existsSync(__dirname + "/client/build")){
+            fs.rmSync(__dirname + "/client/build", { recursive: true, force: true });
+        }
+        console.log("Build process exited with code >>>>>> "+code);
+    });
+    child.on("close", (code) => {
+        console.log(`child process closed with code ${code}`);
+    });
+
+    child.stderr.on("data", (data) => {
+        console.error(`Build process warning/error message >>>>>> ${data}`);
+    });
+    
 }
 
 
@@ -149,5 +188,18 @@ function processFormData(request) {
         }
     }
     return result;
+}
+
+async function getVar(key){
+    data = await readFileAsync(__dirname + "/env.json");
+    let jsonData = JSON.parse(data);
+    return jsonData[key];
+}
+
+async function setVar(key, value){
+    data = await readFileAsync(__dirname + "/env.json");
+    let jsonData = JSON.parse(data);
+    jsonData[key] = value;
+    fs.writeFileSync(__dirname + "/env.json", JSON.stringify(jsonData, null, 2), 'utf8');
 }
 
