@@ -174,7 +174,7 @@ async function deployBuild(template){
 
 
 function ensureDirectoryExistence(filePath) {
-    fs.mkdir(filePath, { recursive: true }, (err) => {
+    fs.mkdirSync(filePath, { recursive: true }, (err) => {
         if (err) {
             console.log("dir already exists!");
         }

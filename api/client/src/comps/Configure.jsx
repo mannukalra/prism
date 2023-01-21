@@ -1,6 +1,7 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Link, MenuItem, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Link, MenuItem, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
+import Alert from "./Alert";
 
 
 async function fetchConfigTemplate(ep, setTemplate) {
@@ -25,7 +26,7 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
-function publishTemplate(endPoint, template, files, closeConfigure){ 
+function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen){ 
     const formData = new FormData();
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
@@ -39,18 +40,23 @@ function publishTemplate(endPoint, template, files, closeConfigure){
         .then(response => response.json())
         .then(data  =>{
             console.log(data)
+            setBackDropOpen(false);
+            let closeParent = false;
+            let title = "Something went wrong!"
             if('message' in data){
                 if(data['message'].includes("successfully")){
-                    closeConfigure();   
+                    title = "Published successfully";
+                    closeParent = true;   
                 }
-                alert(data['message']);
+                handleAlertOpen({open: true, closeParent, title, message: data['message']});
             }else{
-                alert("Failed to deploy your template, refer logs for details!");
+                handleAlertOpen({open: true, closeParent, title, message: "Failed to deploy your template, refer logs for details!"});
             }
         })
         .catch(err => {
-            console.log(err)
-            alert("Some error occured while deployment, refer logs for details!");
+            console.log(err);
+            setBackDropOpen(false);
+            handleAlertOpen({open: true, closeParent: false, title: "Unexpected error", message: "Some error occured while deployment, refer logs for details!"});
     });
 };
 
@@ -79,6 +85,22 @@ function Configure(props) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [errorText, setErrorText] = useState(null);
     const [files, setFiles] = useState(null);
+
+    const [backDropOpen, setBackDropOpen] = useState(false);
+    const [alertData, setAlertData] = useState({open: false, closeParent: false, title: "", message: ""});
+
+    const handleAlertOpen = (data) => {
+        if(data){
+            setAlertData(data);
+        }else{
+            setAlertData({...alertData, open: true});
+        }
+    };
+
+    const handleAlertClose = (closeParent) => {
+        setAlertData({...alertData, open: false});
+        if(closeParent) props.closeConfigure();
+    };
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -123,7 +145,13 @@ function Configure(props) {
     };
 
     function triggerPublish(){
-        publishTemplate(endPoint, template, files, props.closeConfigure);
+        setBackDropOpen(true);
+        publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen);
+        setTimeout(() =>{
+            setBackDropOpen(false);
+            handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
+                message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
+        }, 42000);
     }
 
     const changeTab = (event, newSelection) => {
@@ -194,6 +222,12 @@ function Configure(props) {
                     <Button variant="outlined" color="inherit" onClick={triggerPublish} >Publish</Button>
                 </Tooltip>
             </DialogActions>
+            <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={backDropOpen} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            <Alert alertData={alertData} handleAlertClose={handleAlertClose}></Alert>
         </Dialog>
     );
 }

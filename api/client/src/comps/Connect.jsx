@@ -1,9 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { PageContext } from "../context/CommonContext";
+import Alert from "./Alert";
 
 
-function triggerMail (to, cc, subject, body, page, closeConnect) {
+function triggerMail (to, cc, subject, body, page, handleAlertOpen) {
     console.log("trigger mail called! "+page);
     let _data = { to, cc, subject, body }
     let url = `${window.location.href}sendmail`;
@@ -26,14 +27,17 @@ function triggerMail (to, cc, subject, body, page, closeConnect) {
         .then(data  =>{
             console.log(data)
             if('message' in data && data['message'].includes("Email sent successfully")){
-                closeConnect();
-                alert("Thanks for reaching out, we have received your message. \nWe'll connect with you shortly!");
-            }else
-                alert("Failed to receive your connect request email, please try later, aplogies for inconvinience.");
+                handleAlertOpen({open: true, closeParent: true, title: "Connect request recieved", 
+                    message: "Thanks for reaching out, we have received your message. \nWe'll connect with you shortly!"});
+            }else{
+                handleAlertOpen({open: true, closeParent: false, title: "Something went wrong", 
+                    message: "Failed to receive your connect request email, please try later, aplogies for inconvinience."});
+            }
         })
         .catch(err => {
-            console.log(err)
-            alert("Some error occured while receiving your query by email, please try later, aplogies for inconvinience.");
+            console.log(err);
+            handleAlertOpen({open: true, closeParent: false, title: "Unexpected Error", 
+                message: "Some error occured while receiving your query by email, please try later, aplogies for inconvinience."});
     });
 }
 
@@ -41,6 +45,21 @@ function triggerMail (to, cc, subject, body, page, closeConnect) {
 function Connect(props) {
     const [mailContent, setMailContent] = useState(props.mailContent);
     const { page } = useContext(PageContext);
+
+    const [alertData, setAlertData] = useState({open: false, closeParent: false, title: "", message: ""});
+
+    const handleAlertOpen = (data) => {
+        if(data){
+            setAlertData(data);
+        }else{
+            setAlertData({...alertData, open: true});
+        }
+    };
+
+    const handleAlertClose = (closeParent) => {
+        setAlertData({...alertData, open: false});
+        if(closeParent) props.handleClose();
+    };
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -65,10 +84,11 @@ function Connect(props) {
         if(mailContent.name && mailContent.contact){
             let subject = mailContent.name+" wants to connect with "+page+"!"
             let body = "Dear "+page+",<br><br>Please reach out "+mailContent.name+" at "+mailContent.contact+" regarding below query:<br>"+(mailContent.query || "Sorry, empty query!!")
-            triggerMail(props.tab.to, props.tab.cc, subject, body, page, props.handleClose);
+            triggerMail(props.tab.to, props.tab.cc, subject, body, page, handleAlertOpen);
         }else{
             console.log("invalid input");
-            alert("Please provide at least Name and Contact (Phone number or Email address)!")
+            handleAlertOpen({open: true, closeParent: false, title: "Invalid input",
+                message: "Please provide at least Name and Contact (Phone number or Email address)!"})
         }
     }
 
@@ -93,6 +113,7 @@ function Connect(props) {
                 <Button variant="outlined" color="inherit" onClick={props.handleClose}>Cancel</Button>
                 <Button variant="outlined" color="inherit" onClick={enquire}>Connect</Button>
             </DialogActions>
+            <Alert alertData={alertData} handleAlertClose={handleAlertClose}></Alert>
         </Dialog>
     );
 
