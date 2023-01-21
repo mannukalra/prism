@@ -4,10 +4,7 @@ const nodemailer = require('nodemailer')
 const util = require('util');
 const readFileAsync = util.promisify(fs.readFile);
 const multipart = require('parse-multipart-data');
-const { spawn } = require("child_process");
-
-//TODO read from config
-const endPoints = ['/api', '/pnbc', '/o2s', '/simarhunar', '/ss', '/o2s2'];
+const { spawnSync } = require("child_process");
 
 
 module.exports = async function (context, req) {
@@ -16,7 +13,8 @@ module.exports = async function (context, req) {
     let buildDir = await getVar('BUILD_DIR') || 'build';
     console.log("Current build dir - "+buildDir);
 
-    if (endPoints.some((ep) => req.url.endsWith(ep))) {
+    const endPoints = await getVar('END_POINTS');
+    if (req.url.endsWith('/api') || endPoints.some((ep) => req.url.endsWith('/'+ep))) {
         try {
             data = await readFileAsync(__dirname + "/client/"+buildDir+"/" + file);
             context.log('GET ' + __dirname + "/client/"+buildDir+"/" + file);
@@ -51,8 +49,11 @@ module.exports = async function (context, req) {
 
                 const mergedTemplates = Object.assign(templates, result['template']);
                 try {
-                    await fs.writeFileSync(__dirname + "/client/src/config/Template.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
+                    fs.writeFileSync(__dirname + "/client/src/config/Template.json", JSON.stringify(mergedTemplates, null, 2), 'utf8');
                     console.log('Updated template entry successfully');
+
+                    endPoints.push(req.query['ep']);
+                    await setVar('END_POINTS', [...new Set(endPoints)]);
                     
                     await deployBuild(req.query['ep']);
                     context.res = { status: 200, body: { message: 'Deployed your build successfully' } };
@@ -112,36 +113,62 @@ module.exports = async function (context, req) {
 }
 
 async function deployBuild(template){
-    if(fs.existsSync(__dirname + "/client/build") && await getVar('BUILD_DIR') == 'build'){
-        fs.rmSync(__dirname + "/client/build_bkp", { recursive: true, force: true });
+    if (fs.existsSync(__dirname + "/client/build") ){
+        if (await getVar('BUILD_DIR') == 'build')  {
+            fs.rmSync(__dirname + "/client/build_bkp", { recursive: true, force: true });
 
-        fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", async (err) => {
-            if (err) {
-                console.log("failed to rename build dir "+err)
-                return;
-            }
-        });
+            fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", async (err) => {
+                if (err) {
+                    console.log("failed to rename build dir "+err)
+                    return;
+                }
+            });
+        } else {
+            fs.rmSync(__dirname + "/client/build", { recursive: true, force: true });
+        }
     }
 
     await setVar('BUILD_DIR', 'build_bkp');
     console.log('Triggered Deployment for template '+template);
-    const child = spawn('npm run build --prefix "'+__dirname + '/client/"', {shell: true});
-    
-    child.on('exit', (code) => {
-        if(code == 0){
-            setVar('BUILD_DIR', 'build');
-        }else if(fs.existsSync(__dirname + "/client/build")){
-            fs.rmSync(__dirname + "/client/build", { recursive: true, force: true });
-        }
-        console.log("Build process exited with code >>>>>> "+code);
-    });
-    child.on("close", (code) => {
-        console.log(`child process closed with code ${code}`);
-    });
 
-    child.stderr.on("data", (data) => {
-        console.error(`Build process warning/error message >>>>>> ${data}`);
-    });
+    let output;
+    try{
+        output = spawnSync('npm', ['run', 'build', '--prefix "'+__dirname + '/client/"'], { shell: true, encoding : 'utf8' });
+    }catch(error){
+        console.log('Error', error);
+    }finally{
+        if (fs.existsSync(__dirname + "/client/build/static") ){
+            await setVar('BUILD_DIR', 'build');
+        }
+    }
+    
+    if(output && output.stdout){
+        console.log("output.stdout: \n" +output.stdout);
+        if (output.status == 0) {
+            console.log(`child process exited successfully with code ${output.status}`);
+            await setVar('BUILD_DIR', 'build');
+        } else {
+            console.log(`child process closed with code ${output.status}`);
+        }
+    }
+    // const child = spawnSync('npm run build --prefix "'+__dirname + '/client/"', {shell: true});
+    // child.on('exit', (code) => {
+    //     console.log("Build process exited with code >>>>>> "+code);
+    // });
+    // child.on("close", async (code) => {
+    //     if(code == 0){
+    //         await setVar('BUILD_DIR', 'build');
+    //     }
+    //     console.log(`child process closed with code ${code}`);
+    // });
+
+    // child.stdout.setEncoding('utf8');
+    // child.stdout.on('data', function(data) {
+    //     console.log('Build----- stdout: ' + data);
+    // });
+    // child.stderr.on("data", (data) => {
+    //     console.error(`Build----- warning/error: ${data}`);
+    // });
     
 }
 
@@ -193,6 +220,19 @@ function processFormData(request) {
 async function getVar(key){
     data = await readFileAsync(__dirname + "/env.json");
     let jsonData = JSON.parse(data);
+    if(key === 'BUILD_DIR' && jsonData[key] != 'build'){
+        if (fs.existsSync(__dirname + "/client/build/static") ){
+            await setVar('BUILD_DIR', 'build');
+            return 'build';
+        }
+    }else if(key === 'END_POINTS' && jsonData[key].length == 0){
+        data = await readFileAsync(__dirname + "/client/src/config/Config.json");
+        let jsonData = JSON.parse(data);
+        let keys = Object.keys(jsonData);
+        await setVar('END_POINTS', keys);
+        return keys;
+    }
+
     return jsonData[key];
 }
 

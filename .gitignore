@@ -109,6 +109,7 @@ api/client/coverage
 
 # production
 api/client/build
+api/client/build_bkp
 
 # misc
 .DS_Store
