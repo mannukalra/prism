@@ -7,10 +7,12 @@ import template from "./config/Template.json";
 import { useState } from 'react';
 import { CommonContext } from './context/CommonContext';
 import Configure from './comps/Configure';
-import { Button, Tooltip } from '@mui/material';
+import { Button, Grid, Card, CardHeader, CardMedia, Tooltip } from '@mui/material';
 import { isMobile } from "react-device-detect";
+import { Box } from '@mui/system';
 
 const data = Object.assign(main, template);
+const videos = [{title: "Edit template demo", src: "0Kw4ehhaJbg"}, {title: "Template text/json edit deep-dive", src: "0Kw4ehhaJbg"}, {title: "Dummy", src: "2xhQ2xnQwNI"}];
 
 function links(data){
   return Object.keys(data).map((item, index) => (
@@ -43,6 +45,17 @@ function routes(data){
   ));
 }
 
+function videoCards(){
+  return videos.map((item, index) => (
+    <Card key={index} sx={{ margin: ".5rem", minWidth: "63%" }}>
+      <CardHeader
+        subheader={item.title}
+      />
+      <CardMedia component="iframe" height="300" src={"https://www.youtube.com/embed/"+item.src} allowFullScreen="allowFullScreen" frameBorder="0" />
+    </Card>
+  ));
+}
+
 let PrismHome = () => {
   const [configureOpen, setConfigureOpen] = useState(false);
   
@@ -55,19 +68,31 @@ let PrismHome = () => {
   }
 
   return (
-    <div className="App" style={{ width: isMobile ? 'fit-content' : 'auto' }} >
+    <div className="App" style={{ width: isMobile ? 'fit-content' : 'auto', height: "100%" }} >
       <header className="App-header">
-        <img src={prismLogo} className="App-logo" alt="logo" />
-        <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
-          <p>
-            Welcome to PRISM
-          </p>
-          <div style={{color: "#61dafb"}}>
-            <Tooltip title="Refer existing site templates and build your own in two simple steps.">
-              <Button variant="outlined" color="inherit" onClick={openConfigure} >Build your own website</Button>
-            </Tooltip>
-          </div>
-        </div>
+        <Grid container style={{maxWidth: "63%"}}>
+          <Grid item xl={4} xs={6}>
+            <img src={prismLogo} className="App-logo" alt="logo" />
+          </Grid>
+          <Grid item xl={8} xs={6}>
+            <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
+              <p>
+                Welcome to PRISM
+              </p>
+              <div style={{color: "#61dafb"}}>
+                <Tooltip title="Refer existing site templates and build your own in two simple steps.">
+                  <Button variant="outlined" color="inherit" onClick={openConfigure} >Build your own website</Button>
+                </Tooltip>
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <Box border={3} borderColor="#E7B965" sx={{ display: 'flex', flexDirection: 'row', overflowX: 'scroll', scrollbarWidth: '2px' }}>
+              {videoCards()}
+            </Box>
+          </Grid>
+        </Grid>
+          
         <div className='Nav-items'>
           <header>
             <p>Origin</p>
