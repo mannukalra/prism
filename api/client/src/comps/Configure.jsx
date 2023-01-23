@@ -2,6 +2,7 @@ import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogC
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
 import Alert from "./Alert";
+import { isMobile } from "react-device-detect";
 
 
 async function fetchConfigTemplate(ep, setTemplate) {
@@ -85,9 +86,11 @@ function Configure(props) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [errorText, setErrorText] = useState(null);
     const [files, setFiles] = useState(null);
+    const [selectedFileNames, setSelectedFileNames] = useState("");
 
     const [backDropOpen, setBackDropOpen] = useState(false);
     const [alertData, setAlertData] = useState({open: false, closeParent: false, title: "", message: ""});
+    const [epHelperText, setEPHelperText] = useState("");
 
     const handleAlertOpen = (data) => {
         if(data){
@@ -107,6 +110,7 @@ function Configure(props) {
         switch (name) {
             case 'endPoint':
                 setEndPoint(value);
+                if(value) setEPHelperText("");
                 break;
             case 'sourceTemplateEP':
                 setSourceTemplateEP(value);
@@ -142,16 +146,28 @@ function Configure(props) {
 
     const handleCapture = ( e ) => {
         setFiles(e.target.files);
+        let fileNames = Array.from(e.target.files).map(item =>{
+            return item['name'];
+        }).join(', ');
+        debugger
+        if(fileNames)
+            setSelectedFileNames("Selected Files:- "+ fileNames);
+
+        console.log(selectedFileNames);
     };
 
     function triggerPublish(){
-        setBackDropOpen(true);
-        publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen);
-        setTimeout(() =>{
-            setBackDropOpen(false);
-            handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
-                message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
-        }, 42000);
+        if(endPoint){
+            setBackDropOpen(true);
+            publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen);
+            setTimeout(() =>{
+                setBackDropOpen(false);
+                handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
+                    message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
+            }, 42000);
+        }else{
+            setEPHelperText("You must provide EndPoint value");
+        }
     }
 
     const changeTab = (event, newSelection) => {
@@ -176,7 +192,7 @@ function Configure(props) {
                         </Tabs>
                         <TextField id="outlined-sourceTemplateEP" label="Source Template" size="small"
                             name="sourceTemplateEP" value={sourceTemplateEP} onChange={handleChange} 
-                            sx={{height: '0.5rem', width: '12rem' }} select required >
+                            sx={{height: '0.5rem', width: isMobile ? '8rem' : '12rem' }} select required >
                                 {templatesInfo.map((option) => (
                                     <MenuItem key={Object.keys(option)[0]} value={Object.keys(option)[0]}>
                                         {Object.values(option)[0]}
@@ -185,7 +201,8 @@ function Configure(props) {
                         </TextField>
                         <Link href={'/api/'+sourceTemplateEP} target='_blank' variant='caption' >Refer</Link>
                         <TextField id="outlined-endpoint" label="Your EndPoint" name="endPoint" size="small"
-                            value={endPoint} onChange={handleChange} sx={{height: '0.5rem'}} required />
+                            error={epHelperText} helperText={epHelperText}
+                            value={endPoint} onChange={handleChange} sx={{height: '0.5rem', width: isMobile ? '8rem' : '12rem'}} required />
                     </Grid>
                     <Grid style={{marginTop: '3rem'}}>
                         <div role="tabpanel" value={selectedIndex} hidden={selectedIndex !== 0}>
@@ -211,11 +228,13 @@ function Configure(props) {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="inherit" onClick={props.closeConfigure} >Cancel</Button>
-                <Tooltip title="Select multiple image files or a single zip file with all images">
+                <Tooltip placement="top-start"
+                    title={selectedFileNames ? <h2>{selectedFileNames}</h2> : "Select multiple image files or a single zip file with all images"}>
                     <Button variant="outlined" color="inherit" component="label"
                         sx={{ marginLeft: "3rem" }}
                     >Select Images
-                        <input type="file" hidden multiple accept='application/zip, image/jpeg, image/png' acceptCharset='UTF-8' onChange={handleCapture} />
+                        <input type="file" hidden multiple accept='application/zip, image/jpeg, image/png'
+                            acceptCharset='UTF-8' onChange={handleCapture} />
                     </Button>
                 </Tooltip>
                 <Tooltip title="Will deploy your website, may take few mintues before you could try it out.">

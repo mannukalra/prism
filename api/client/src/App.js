@@ -47,7 +47,7 @@ function routes(data){
 
 function videoCards(){
   return videos.map((item, index) => (
-    <Card key={index} sx={{ margin: ".5rem", minWidth: "63%" }}>
+    <Card key={index} sx={{ margin: ".5rem", minWidth: isMobile ? "100%" : "63%" }}>
       <CardHeader
         subheader={item.title}
       />
@@ -74,7 +74,7 @@ let PrismHome = () => {
           <Grid item xl={4} xs={6}>
             <img src={prismLogo} className="App-logo" alt="logo" />
           </Grid>
-          <Grid item xl={8} xs={6}>
+          <Grid item xl={8} xs={6} sx={{ marginBottom: "1rem" }}>
             <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
               <p>
                 Welcome to PRISM
