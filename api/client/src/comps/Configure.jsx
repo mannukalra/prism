@@ -46,7 +46,7 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             let title = "Something went wrong!"
             if('message' in data){
                 if(data['message'].includes("successfully")){
-                    title = "Published successfully";
+                    title = "Initiated deployment";
                     closeParent = true;   
                 }
                 handleAlertOpen({open: true, closeParent, title, message: data['message']});
@@ -86,11 +86,11 @@ function Configure(props) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [errorText, setErrorText] = useState(null);
     const [files, setFiles] = useState(null);
-    const [selectedFileNames, setSelectedFileNames] = useState("");
+    const [selectedFileNames, setSelectedFileNames] = useState(null);
 
     const [backDropOpen, setBackDropOpen] = useState(false);
     const [alertData, setAlertData] = useState({open: false, closeParent: false, title: "", message: ""});
-    const [epHelperText, setEPHelperText] = useState("");
+    const [epHelperText, setEPHelperText] = useState(null);
 
     const handleAlertOpen = (data) => {
         if(data){
@@ -110,7 +110,7 @@ function Configure(props) {
         switch (name) {
             case 'endPoint':
                 setEndPoint(value);
-                if(value) setEPHelperText("");
+                if(value) setEPHelperText(null);
                 break;
             case 'sourceTemplateEP':
                 setSourceTemplateEP(value);
@@ -149,7 +149,6 @@ function Configure(props) {
         let fileNames = Array.from(e.target.files).map(item =>{
             return item['name'];
         }).join(', ');
-        debugger
         if(fileNames)
             setSelectedFileNames("Selected Files:- "+ fileNames);
 
@@ -164,9 +163,9 @@ function Configure(props) {
                 setBackDropOpen(false);
                 handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
                     message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
-            }, 42000);
+            }, 300000);
         }else{
-            setEPHelperText("You must provide EndPoint value");
+            setEPHelperText("Please provide valid EndPoint value");
         }
     }
 

@@ -47,7 +47,7 @@ function routes(data){
 
 function videoCards(){
   return videos.map((item, index) => (
-    <Card key={index} sx={{ margin: ".5rem", minWidth: isMobile ? "100%" : "63%" }}>
+    <Card key={index} sx={{ margin: ".5rem", minWidth: isMobile ? "96%" : "63%" }}>
       <CardHeader
         subheader={item.title}
       />
@@ -71,11 +71,11 @@ let PrismHome = () => {
     <div className="App" style={{ width: isMobile ? 'fit-content' : 'auto', height: "100%" }} >
       <header className="App-header">
         <Grid container style={{maxWidth: "63%"}}>
-          <Grid item xl={4} xs={6}>
+          <Grid item xl={3} xs={4} style={{marginLeft: isMobile ? "1rem" : "0rem"}}>
             <img src={prismLogo} className="App-logo" alt="logo" />
           </Grid>
-          <Grid item xl={8} xs={6} sx={{ marginBottom: "1rem" }}>
-            <div flex-direction="column" style={{alignSelf: "flex-start", marginTop: "12rem"}}>
+          <Grid item xl={9} xs={7}>
+            <div flex-direction="column" style={{alignSelf: "flex-start", margin: "2rem"}}>
               <p>
                 Welcome to PRISM
               </p>
@@ -99,7 +99,7 @@ let PrismHome = () => {
           </header>
           {links(data)}
         </div>
-        <div style={{marginLeft: '3rem', marginRight: '1rem'}}>
+        <div style={{marginLeft: '3rem', marginRight: '1rem', whiteSpace: 'nowrap'}}>
           <header>
             <p>DNS Fwded</p>
           </header>

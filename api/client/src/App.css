@@ -3,11 +3,10 @@
 }
 
 .App-logo {
-  height: 24vmin;
+  height: 21vmin;
   pointer-events: none;
-  margin: 2rem;
+  margin-bottom: 2rem;
   align-self: baseline;
-  margin-top: 7rem;
 }
 
 .App-header {

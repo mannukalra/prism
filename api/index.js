@@ -2,7 +2,7 @@ var fs = require("fs")
 var mime = require('mime-types')
 const nodemailer = require('nodemailer')
 const multipart = require('parse-multipart-data');
-const { spawnSync, spawn } = require("child_process");
+const { exec } = require("child_process");
 
 
 module.exports = async function (context, req) {
@@ -53,8 +53,8 @@ module.exports = async function (context, req) {
                     endPoints.push(req.query['ep']);
                     setVar('END_POINTS', [...new Set(endPoints)]);
                     
-                    deployBuildSync(req.query['ep'], context);
-                    context.res = { status: 200, body: { message: 'Deployed your build successfully' } };
+                    triggerBuild(req.query['ep'], context);
+                    context.res = { status: 200, body: { message: 'Triggerd build deployment successfully, may take few minutes to reflect in the templates list.' } };
                 } catch (err) {
                     context.log(err);
                     context.res = { status: 400, body: { message: 'Failed to deploy site, err- ' + err } };
@@ -110,54 +110,13 @@ module.exports = async function (context, req) {
     }
 }
 
-function deployBuildSync(template, context){
+
+function triggerBuild(template, context){
     if (fs.existsSync(__dirname + "/client/build") ){
         if (getVar('BUILD_DIR') == 'build')  {
             fs.rmSync(__dirname + "/client/build_bkp", { recursive: true, force: true });
 
-            fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", async (err) => {
-                if (err) {
-                    context.log("failed to rename build dir "+err)
-                    return;
-                }
-            });
-        } else {
-            fs.rmSync(__dirname + "/client/build", { recursive: true, force: true });
-        }
-    }
-
-    setVar('BUILD_DIR', 'build_bkp');
-    context.log('Triggered Deployment for template '+template);
-
-    let output;
-    try{
-        output = spawnSync('npm', ['run', 'build', '--prefix "'+__dirname + '/client/"'], { shell: true, encoding : 'utf8' });
-    }catch(error){
-        context.log('spawnSync Error', error);
-    }finally{
-        if (fs.existsSync(__dirname + "/client/build/static") ){
-            setVar('BUILD_DIR', 'build');
-        }
-    }
-    
-    if(output && output.stdout){
-        context.log("output.stdout: \n" +output.stdout);
-        if (output.status == 0) {
-            context.log(`child process exited successfully with code ${output.status}`);
-            setVar('BUILD_DIR', 'build');
-        } else {
-            context.log(`child process closed with code ${output.status}`);
-        }
-    }
-    
-}
-
-function deployBuild(template, context){
-    if (fs.existsSync(__dirname + "/client/build") ){
-        if (getVar('BUILD_DIR') == 'build')  {
-            fs.rmSync(__dirname + "/client/build_bkp", { recursive: true, force: true });
-
-            fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", async (err) => {
+            fs.renameSync(__dirname + "/client/build", __dirname + "/client/build_bkp", (err) => {
                 if (err) {
                     context.log("failed to rename build dir "+err)
                     return;
@@ -168,33 +127,23 @@ function deployBuild(template, context){
         }
     }
     setVar('BUILD_DIR', 'build_bkp');
-    context.log('Triggered Deployment for template '+template);
+    context.log('Triggering deployment for template '+template);
 
-    let child;
     try{
-        child = spawn('npm run build --prefix "'+__dirname + '/client/"', { shell: true, encoding : 'utf8' });
+        let child = exec(__dirname +'\\buildClient.ps1', { shell: 'powershell.exe' });
+        console.log('Triggered deployment for template '+template);
         child.on('exit', (code) => {
-            context.log("Build process exited with code >>>>>> "+code);
-        });
-        child.on("close", (code) => {
-            if(code == 0){
-                setVar('BUILD_DIR', 'build');
-            }
-            context.log(`child process closed with code ${code}`);
+            console.log("Build process exited with code >>>>>> "+code);
         });
         child.stdout.on('data', function(data) {
-            context.log('Build----- stdout: ' + data);
+            console.log('Build----- stdout: ' + data);
         });
         child.stderr.on("data", (data) => {
-            context.log(`Build----- warning/error: ${data}`);
+            console.log(`Build----- warning/error: ${data}`);
         });
     }catch(error){
-        context.log('Error', error);
-    }finally{
-        if (fs.existsSync(__dirname + "/client/build/static") ){
-            setVar('BUILD_DIR', 'build');
-        }
-    }  
+        console.log('Error occured while launching build script - ', error);
+    }
 }
 
 
