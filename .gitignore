@@ -121,3 +121,4 @@ api/client/build_bkp
 api/client/npm-debug.log*
 api/client/yarn-debug.log*
 api/client/yarn-error.log*
+api/test.js

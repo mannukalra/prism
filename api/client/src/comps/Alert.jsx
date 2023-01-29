@@ -22,7 +22,7 @@ export default function Alert(props) {
                     {props.alertData.title || 'Parent comp missed it'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText id="alert-dialog-description" sx={{whiteSpace: "pre-line"}}>
                         {props.alertData.message || 'Looks like Parent comp missed it'}
                     </DialogContentText>
                 </DialogContent>

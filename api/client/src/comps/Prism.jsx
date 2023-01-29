@@ -8,6 +8,8 @@ import { ReactComponent as WhatsAppIcon } from "../img/icons/whatsapp-48.svg";
 import { CommonContext } from '../context/CommonContext';
 import { PageContext } from '../context/CommonContext';
 import { Helmet } from "react-helmet-async";
+import template from "../config/Template.json";
+import Alert from "./Alert";
 
 const phoneOptions = [{label: "Call", icon: <PhoneIcon/>, action: 'tel:+91-', webAction: 'tel:+91-'}, 
                         {label: "Text", icon: <MsgIcon/>, action: 'sms:+91-'}, 
@@ -54,7 +56,8 @@ function Prism(props) {
     const itemRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const { isMobile } = useContext(CommonContext);
-
+    const [alertData, setAlertData] = useState({open: Object.keys(template).includes(props.page), closeParent: false, title: "Hello from PRISM", message: "Congratulations on building your template with us. \n To get rid of this popup window on launch and to make your changes premanent please notify mkmandeepkalra@gmail.com regarding your endpoint!"});
+    debugger;
     useEffect(() => {
         if (itemRef && itemRef.current) {
           window.scrollTo({
@@ -79,6 +82,10 @@ function Prism(props) {
 
     const navToTab = (index) =>{
         setSelectedIndex(index);
+    }
+
+    const handleAlertClose = () => {
+        setAlertData({...alertData, open: false});
     }
 
     return (
@@ -119,6 +126,7 @@ function Prism(props) {
                 <meta name="description" content={config.seoDesc} />
                 <link rel="canonical" href="" />
             </Helmet>
+            <Alert alertData={alertData} handleAlertClose={handleAlertClose}></Alert>
         </Box>
     );
 }
