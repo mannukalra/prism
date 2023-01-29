@@ -27,6 +27,16 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
+async function triggerBuild(endPoint){
+    let url = "/api/build/triggerbuild?ep="+endPoint;
+    
+    const response = await fetch(url, {method: 'post'});
+    const buildStatus = await response.json();
+    console.log("buildStatus >>>>>>>>>> ", buildStatus);
+    return buildStatus;
+
+}
+
 function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen){ 
     const formData = new FormData();
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
@@ -36,7 +46,7 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             formData.append('images', files[i]); // appending all attachments as images
         }
     };
-    let url = "/api/updatetemplate?ep="+endPoint;
+    let url = "/api/build/updatetemplate?ep="+endPoint;
     fetch(url, { method: 'post', body: formData})
         .then(response => response.json())
         .then(data  =>{
@@ -47,7 +57,8 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             if('message' in data){
                 if(data['message'].includes("successfully")){
                     title = "Initiated deployment";
-                    closeParent = true;   
+                    closeParent = true;
+                    triggerBuild(endPoint);
                 }
                 handleAlertOpen({open: true, closeParent, title, message: data['message']});
             }else{
@@ -109,7 +120,7 @@ function Configure(props) {
         const { name, value } = e.target;
         switch (name) {
             case 'endPoint':
-                setEndPoint(value);
+                setEndPoint(value.replace(/[^a-z0-9]/gi, ''));
                 if(value) setEPHelperText(null);
                 break;
             case 'sourceTemplateEP':
@@ -160,10 +171,12 @@ function Configure(props) {
             setBackDropOpen(true);
             publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen);
             setTimeout(() =>{
-                setBackDropOpen(false);
-                handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
-                    message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
-            }, 300000);
+                if(backDropOpen){
+                    setBackDropOpen(false);
+                    handleAlertOpen({open: true, closeParent: true, title: "Request timed out",
+                        message: "Unable to receive publish confirmation. Try refreshing page in sometime to verify your template status!"})
+                }
+            }, 42000);
         }else{
             setEPHelperText("Please provide valid EndPoint value");
         }

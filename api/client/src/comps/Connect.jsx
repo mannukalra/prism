@@ -7,12 +7,13 @@ import Alert from "./Alert";
 function triggerMail (to, cc, subject, body, page, handleAlertOpen) {
     console.log("trigger mail called! "+page);
     let _data = { to, cc, subject, body }
-    let url = `${window.location.href}sendmail`;
+    const sendMailEP = 'build/sendmail';
+    let url = `${window.location.href}${sendMailEP}`;
     
-    if(url.endsWith(page+"sendmail"))
-        url = url.replace(page+"sendmail", "sendmail");
-    if(url.endsWith(page+"/sendmail"))
-        url = url.replace(page+"/sendmail", "sendmail");
+    if(url.endsWith(page + sendMailEP))
+        url = url.replace(page + sendMailEP, sendMailEP);
+    if(url.endsWith(page +"/"+ sendMailEP))
+        url = url.replace(page +"/"+ sendMailEP, sendMailEP);
 
     // url = url.replace('3000', '5000');
     url = url.replace('http:', 'https:');
