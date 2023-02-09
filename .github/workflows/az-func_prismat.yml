@@ -38,8 +38,8 @@ jobs:
         shell: pwsh
         run: |
           pushd './api/client/.'
-          # npm install --legacy-peer-deps
-          # npm run build
+          npm install --legacy-peer-deps
+          npm run build
           popd
 
       - name: 'Run Azure Functions Action'
