@@ -37,7 +37,7 @@ jobs:
       - name: 'Resolve Project client Dependencies Using Npm'
         shell: pwsh
         run: |
-          pushd './api/client/.'
+          pushd './client/.'
           npm install --legacy-peer-deps
           npm run build
           popd

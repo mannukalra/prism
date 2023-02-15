@@ -12,8 +12,8 @@ module.exports = async function (context, req) {
     const endPoints = getVar('END_POINTS');
     if (req.url.endsWith('/api') || endPoints.some((ep) => req.url.endsWith('/'+ep))) {
         try {
-            data = fs.readFileSync(__dirname + "/client/"+buildDir+"/" + file);
-            context.log('GET ' + __dirname + "/client/"+buildDir+"/" + file);
+            data = fs.readFileSync(__dirname + "/../client/"+buildDir+"/" + file);
+            context.log('GET ' + __dirname + "/../client/"+buildDir+"/" + file);
             let contentType = mime.lookup(file)
             context.res = { status: 200, body: data, isRaw: true, headers: { 'Content-Type': contentType } };
         } catch (err) {
@@ -23,7 +23,7 @@ module.exports = async function (context, req) {
 
     } else if (req.url.includes("/configtemplate?ep=")) {
 
-        data = fs.readFileSync(__dirname + "/client/src/config/Config.json");
+        data = fs.readFileSync(__dirname + "/../client/src/config/Config.json");
         let jsonData = JSON.parse(data);
         const configEndPoints = getVar('CONFIG_END_POINTS');
         if(Array.isArray(configEndPoints) && configEndPoints.length == 0){
@@ -33,7 +33,7 @@ module.exports = async function (context, req) {
 
     } else if (req.url.endsWith("/templatesinfo")) {
 
-        data = fs.readFileSync(__dirname + "/client/src/config/Config.json");
+        data = fs.readFileSync(__dirname + "/../client/src/config/Config.json");
         let jsonData = JSON.parse(data);
         let templatesInfo = Object.entries(jsonData).map(([key, val] = entry) => {
             return { [key]: val.label };
@@ -43,7 +43,7 @@ module.exports = async function (context, req) {
 
         file = req.url.substring(req.url.indexOf("/api/") + 5);
         try {
-            data = fs.readFileSync(__dirname + "/client/"+buildDir+"/" + file);
+            data = fs.readFileSync(__dirname + "/../client/"+buildDir+"/" + file);
             // context.log('GET ' + __dirname + "/client/"+buildDir+"/" +  file);
             var contentType = mime.lookup(file)
             context.res = { status: 200, body: data, isRaw: true, headers: { 'Content-Type': contentType } };

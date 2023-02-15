@@ -10,7 +10,7 @@ const { PowerShell } = require('node-powershell');
 module.exports = async function (context, req) {
     context.log('build trigger function processed a request.');
 
-    const apiPath = path.join(__dirname, '../api');
+    const apiPath = path.join(__dirname, '..');
     let buildDir = getVar('BUILD_DIR') || 'build';
     const endPoints = getVar('END_POINTS');
 
@@ -39,7 +39,7 @@ module.exports = async function (context, req) {
                         endPoints.push(req.query['ep']);
                         setVar('END_POINTS', [...new Set(endPoints)]);
 
-                        context.res = { status: 200, body: { message: 'Triggerd deployment successfully, may take few minutes to reflect in the templates list.' } };
+                        context.res = { status: 200, body: { message: 'Triggerd deployment successfully, may take around 10 minutes to reflect in the templates list.' } };
                     } catch (err) {
                         context.log(err);
                         context.res = { status: 400, body: { message: 'Failed to deploy site, err- ' + err } };
@@ -81,7 +81,7 @@ module.exports = async function (context, req) {
 }
 
 
-function triggerBuild(template, apiPath, context) {
+const triggerBuild = async(template, apiPath, context) => {
     if (fs.existsSync(apiPath + "/client/build")) {
         if (getVar('BUILD_DIR') == 'build') {
             fs.rmSync(apiPath + "/client/build_bkp", { recursive: true, force: true });
@@ -100,12 +100,24 @@ function triggerBuild(template, apiPath, context) {
     context.log('Triggering deployment for template ' + template);
 
     //initialize PowerShell instance
-    const ps = new PowerShell({ executionPolicy: 'Bypass', noProfile: true });
-    ps.invoke('npm run build --prefix ' + apiPath + '/client/').then(response => {
-        context.log('Build----- stdout: ', response);
-    }).catch(err => {
-        context.log(`Build----- warning/error: ${err}`);
+    const ps = new PowerShell({
+        debug: true,
+        executableOptions: {
+        '-ExecutionPolicy': 'Bypass',
+        '-NoProfile': true
+        }
     });
+
+    try{
+        const clientPath = apiPath+"\\client";
+        context.log("Building NPM on clientPath ------------", clientPath);
+        const buildCommand = PowerShell.command`npm run build --prefix ${clientPath}`;
+        await ps.invoke(buildCommand);
+    } catch (error) {
+        console.log("build error- ", error);
+    } finally {
+        await ps.dispose();
+    }
 
     // try{
     //     let child = exec(apiPath +'\\buildClient.ps1', { shell: 'powershell.exe' });

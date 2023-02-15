@@ -100,16 +100,16 @@ __azurite_db*__.json
 
 
 # dependencies
-api/client/node_modules
-api/client/.pnp
+client/node_modules
+client/.pnp
 .pnp.js
 
 # testing
-api/client/coverage
+client/coverage
 
 # production
-api/client/build
-api/client/build_bkp
+client/build
+client/build_bkp
 
 # misc
 .DS_Store
@@ -118,7 +118,7 @@ api/client/build_bkp
 .env.test.local
 .env.production.local
 
-api/client/npm-debug.log*
-api/client/yarn-debug.log*
-api/client/yarn-error.log*
-api/test.js
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+test.js

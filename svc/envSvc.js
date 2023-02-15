@@ -5,7 +5,7 @@ function getVar(key){
     data = fs.readFileSync(__dirname + "/env.json");
     let jsonData = JSON.parse(data);
 
-    const apiPath = path.join(__dirname, '../api');
+    const apiPath = path.join(__dirname, '..');
     if(key === 'BUILD_DIR' && jsonData[key] != 'build'){
         if (fs.existsSync(apiPath + "/client/build/static") ){
             setVar('BUILD_DIR', 'build');
