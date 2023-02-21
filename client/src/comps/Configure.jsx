@@ -1,4 +1,4 @@
-import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Link, MenuItem, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, LinearProgress, Link, MenuItem, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactJson from 'react-json-view';
 import Alert from "./Alert";
@@ -27,17 +27,20 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
-async function triggerBuild(endPoint){
-    let url = "/api/build/triggerbuild?ep="+endPoint;
+async function triggerBuild(endPoint, hookTillBuildCompletion){
+    let url = "/api/orch/triggerbuild?ep="+endPoint;
     
     const response = await fetch(url, {method: 'post'});
     const buildStatus = await response.json();
+    if(buildStatus['statusQueryGetUri']){
+        // hookTillBuildCompletion(buildStatus['statusQueryGetUri']);
+        console.log("Check build status on following url: ", buildStatus['statusQueryGetUri'])
+    }
     console.log("buildStatus >>>>>>>>>> ", buildStatus);
     return buildStatus;
-
 }
 
-function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen){ 
+function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen, hookTillBuildCompletion){ 
     const formData = new FormData();
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
@@ -46,11 +49,14 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             formData.append('images', files[i]); // appending all attachments as images
         }
     };
-    let url = "/api/build/updatetemplate?ep="+endPoint;
+    let url = "/api/orch/updatetemplate?ep="+endPoint;
     fetch(url, { method: 'post', body: formData})
-        .then(response => response.json())
-        .then(data  =>{
-            console.log(data)
+        .then(response => {
+            console.log(response);
+            return response.json();
+        }).then(data  =>{
+            data = data['json'] ? JSON.parse(data['json']) : data;
+            console.log(data);
             setBackDropOpen(false);
             let closeParent = false;
             let title = "Something went wrong!"
@@ -58,7 +64,7 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
                 if(data['message'].includes("successfully")){
                     title = "Initiated deployment";
                     closeParent = true;
-                    triggerBuild(endPoint);
+                    triggerBuild(endPoint, hookTillBuildCompletion);
                 }
                 handleAlertOpen({open: true, closeParent, title, message: data['message']});
             }else{
@@ -100,6 +106,7 @@ function Configure(props) {
     const [selectedFileNames, setSelectedFileNames] = useState(null);
 
     const [backDropOpen, setBackDropOpen] = useState(false);
+    const [buildInProgress, setBuildInProgress] = useState(false);
     const [alertData, setAlertData] = useState({open: false, closeParent: false, title: "", message: ""});
     const [epHelperText, setEPHelperText] = useState(null);
 
@@ -166,10 +173,28 @@ function Configure(props) {
         console.log(selectedFileNames);
     };
 
+    function hookTillBuildCompletion(url){
+        setBuildInProgress(true);
+        try {
+            const timer = setInterval(async () => {
+              const res = await fetch(url);
+              const respBody = await res.json();//"runtimeStatus": "Completed"
+              if( respBody['runtimeStatus'] && respBody['runtimeStatus'] === "Completed"){
+                console.log("Build runtimStatus is now Completed, clearing the interval!")
+                setBuildInProgress(false);
+                clearInterval(timer);
+              }
+              console.log("Current Build runtimStatus ", respBody['runtimeStatus']);
+            }, 30000);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     function triggerPublish(){
         if(endPoint){
             setBackDropOpen(true);
-            publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen);
+            publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen, hookTillBuildCompletion);
             setTimeout(() =>{
                 if(backDropOpen){
                     setBackDropOpen(false);
@@ -239,7 +264,16 @@ function Configure(props) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="inherit" onClick={props.closeConfigure} >Cancel</Button>
+                { buildInProgress && 
+                <Box sx={{ width: '42%' }}>
+                    <Tooltip title={<h1>Previous Deployment build is in progress, please wait for completion before next Publish/Deploy!</h1>}>
+                        <LinearProgress />
+                    </Tooltip>
+                </Box>}
+                <Button variant="outlined" color="inherit" 
+                    onClick={props.closeConfigure} sx={{ marginLeft: "1rem" }}>
+                        Cancel
+                </Button>
                 <Tooltip placement="top-start"
                     title={selectedFileNames ? <h2>{selectedFileNames}</h2> : "Select multiple image files or a single zip file with all images"}>
                     <Button variant="outlined" color="inherit" component="label"

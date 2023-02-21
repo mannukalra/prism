@@ -7,7 +7,7 @@ import Alert from "./Alert";
 function triggerMail (to, cc, subject, body, page, handleAlertOpen) {
     console.log("trigger mail called! "+page);
     let _data = { to, cc, subject, body }
-    const sendMailEP = 'build/sendmail';
+    const sendMailEP = 'orch/sendmail';
     let url = `${window.location.href}${sendMailEP}`;
     
     if(url.endsWith(page + sendMailEP))
@@ -26,6 +26,7 @@ function triggerMail (to, cc, subject, body, page, handleAlertOpen) {
         })
         .then(response => response.json())
         .then(data  =>{
+            data = data['json'] ? JSON.parse(data['json']) : data;
             console.log(data)
             if('message' in data && data['message'].includes("Email sent successfully")){
                 handleAlertOpen({open: true, closeParent: true, title: "Connect request recieved", 

@@ -1,8 +1,9 @@
 var fs = require("fs")
 const path = require('path');
 
+
 function getVar(key){
-    data = fs.readFileSync(__dirname + "/env.json");
+    data = fs.readFileSync(__dirname + "/vars.json");
     let jsonData = JSON.parse(data);
 
     const apiPath = path.join(__dirname, '..');
@@ -23,11 +24,12 @@ function getVar(key){
 }
 
 function setVar(key, value){
-    data = fs.readFileSync(__dirname + "/env.json");
+    data = fs.readFileSync(__dirname + "/vars.json");
     let jsonData = JSON.parse(data);
     jsonData[key] = value;
-    fs.writeFileSync(__dirname + "/env.json", JSON.stringify(jsonData, null, 2), 'utf8');
+    fs.writeFileSync(__dirname + "/vars.json", JSON.stringify(jsonData, null, 2), 'utf8');
 }
+
 
 exports.setVar = setVar
 exports.getVar = getVar
