@@ -40,5 +40,5 @@
     ]
   },
   "proxy": "http://localhost:5000",
-  "homepage": "https://prismat.azurewebsites.net"
+  "homepage": "https://prismwa.azurewebsites.net"
 }
