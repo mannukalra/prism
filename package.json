@@ -1,16 +1,17 @@
 {
   "name": "prism",
   "version": "1.0.0",
-  "description": "Multiple sites from one App",
+  "description": "Build your own site with PRISM",
+  "main": "index.js",
   "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/mannukalra/prism"
   },
   "keywords": [
+    "Prism",
     "pnbc",
     "o2s"
   ],
@@ -20,10 +21,10 @@
     "url": "https://github.com/mannukalra/prism/issues"
   },
   "dependencies": {
-    "durable-functions": "^2.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "mime-types": "^2.1.35",
-    "node-powershell": "^5.0.1",
-    "nodemailer": "^6.8.0",
-    "parse-multipart-data": "^1.5.0"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1"
   }
 }

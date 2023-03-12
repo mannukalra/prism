@@ -17,7 +17,7 @@ const videos = [{title: "Edit template demo", src: "0Kw4ehhaJbg"}, {title: "Temp
 function links(data){
   return Object.keys(data).map((item, index) => (
     <div key={index} style={{whiteSpace: 'nowrap', marginBottom: ".3rem", alignContent: "left"}}>
-      <Link className="App-link" to={"/api/"+item} target="_blank">
+      <Link className="App-link" to={"/"+item} target="_blank">
         {data[item].label}
       </Link>
     </div>
@@ -36,7 +36,7 @@ function anchors(data){
 
 function routes(data){
   return Object.keys(data).map((item, index) => (
-      <Route key={"prism-home-"+index} path={"/api/"+item} 
+      <Route key={"prism-home-"+index} path={"/"+item} 
         element={
           <CommonContext.Provider value={{ isMobile }}>
             <Prism page={item} config={data[item]} />
@@ -116,7 +116,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route key="prism-home" path="/api" element={PrismHome()} />
+        <Route key="prism-home" path="" element={PrismHome()} />
         {routes(data)}
       </Routes>
     </BrowserRouter>

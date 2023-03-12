@@ -7,7 +7,7 @@ import Alert from "./Alert";
 function triggerMail (to, cc, subject, body, page, handleAlertOpen) {
     console.log("trigger mail called! "+page);
     let _data = { to, cc, subject, body }
-    const sendMailEP = 'orch/sendmail';
+    const sendMailEP = 'sendmail';
     let url = `${window.location.href}${sendMailEP}`;
     
     if(url.endsWith(page + sendMailEP))

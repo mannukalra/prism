@@ -4,12 +4,13 @@ import ReactJson from 'react-json-view';
 import Alert from "./Alert";
 import { isMobile } from "react-device-detect";
 
+const proxy = "";
 
 async function fetchConfigTemplate(ep, setTemplate) {
     console.log("fetchConfigTemplate called! ");
-    let url = "/api/configtemplate?ep="+ep;//`${window.location.href}configtemplate`;
+    let url = "/configtemplate?ep="+ep;//`${window.location.href}configtemplate`;
 
-    const response = await fetch(url);
+    const response = await fetch(proxy+url);
     const template = await response.json();
     if(setTemplate)
         setTemplate(template);
@@ -19,18 +20,18 @@ async function fetchConfigTemplate(ep, setTemplate) {
 
 async function getTemplatesInfo() {
     console.log("getTemplatesInfo called! ");
-    let url = "/api/templatesinfo";
+    let url = "/templatesinfo";
 
-    const response = await fetch(url);
+    const response = await fetch(proxy+url);
     const templatesInfo = await response.json();
     console.log(templatesInfo);
     return templatesInfo;
 }
 
 async function triggerBuild(endPoint, hookTillBuildCompletion){
-    let url = "/api/orch/triggerbuild?ep="+endPoint;
+    let url = "/triggerbuild?ep="+endPoint;
     
-    const response = await fetch(url, {method: 'post'});
+    const response = await fetch(proxy+url, {method: 'post'});
     const buildStatus = await response.json();
     if(buildStatus['statusQueryGetUri']){
         // hookTillBuildCompletion(buildStatus['statusQueryGetUri']);
@@ -49,8 +50,8 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             formData.append('images', files[i]); // appending all attachments as images
         }
     };
-    let url = "/api/orch/updatetemplate?ep="+endPoint;
-    fetch(url, { method: 'post', body: formData})
+    let url = "/updatetemplate?ep="+endPoint;
+    fetch(proxy+url, { method: 'post', body: formData})
         .then(response => {
             console.log(response);
             return response.json();
@@ -177,7 +178,7 @@ function Configure(props) {
         setBuildInProgress(true);
         try {
             const timer = setInterval(async () => {
-              const res = await fetch(url);
+              const res = await fetch(proxy+url);
               const respBody = await res.json();//"runtimeStatus": "Completed"
               if( respBody['runtimeStatus'] && respBody['runtimeStatus'] === "Completed"){
                 console.log("Build runtimStatus is now Completed, clearing the interval!")
@@ -236,7 +237,7 @@ function Configure(props) {
                                     </MenuItem>
                                 ))}
                         </TextField>
-                        <Link href={'/api/'+sourceTemplateEP} target='_blank' variant='caption' >Refer</Link>
+                        <Link href={'/'+sourceTemplateEP} target='_blank' variant='caption' >Refer</Link>
                         <TextField id="outlined-endpoint" label="Your EndPoint" name="endPoint" size="small"
                             error={epHelperText} helperText={epHelperText}
                             value={endPoint} onChange={handleChange} sx={{height: '0.5rem', width: isMobile ? '8rem' : '12rem'}} required />
