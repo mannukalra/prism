@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view';
 import Alert from "./Alert";
 import { isMobile } from "react-device-detect";
 
-const proxy = "";
+const proxy = "";//"http://localhost:5000";
 
 async function fetchConfigTemplate(ep, setTemplate) {
     console.log("fetchConfigTemplate called! ");
@@ -28,20 +28,24 @@ async function getTemplatesInfo() {
     return templatesInfo;
 }
 
-async function triggerBuild(endPoint, hookTillBuildCompletion){
+async function triggerBuild(endPoint, setBackDropOpen, handleAlertOpen){
     let url = "/triggerbuild?ep="+endPoint;
     
     const response = await fetch(proxy+url, {method: 'post'});
     const buildStatus = await response.json();
-    if(buildStatus['statusQueryGetUri']){
-        // hookTillBuildCompletion(buildStatus['statusQueryGetUri']);
-        console.log("Check build status on following url: ", buildStatus['statusQueryGetUri'])
+
+    setBackDropOpen(false);
+    let closeParent = false;
+    let title = "Something went wrong!"
+    if(buildStatus['message'] && buildStatus['message'].includes('successfully')){
+        closeParent = true;
+        title = "Deployment Successful";
     }
+    handleAlertOpen({open: true, closeParent, title, message: buildStatus['message']+". Please refresh the page if your end-point/template doesn't reflect on Prism Home!"});
     console.log("buildStatus >>>>>>>>>> ", buildStatus);
-    return buildStatus;
 }
 
-function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen, hookTillBuildCompletion){ 
+function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlertOpen){ 
     const formData = new FormData();
     formData.append('template', new Blob([JSON.stringify({[endPoint]: template})], {type: "application/json"}));
 
@@ -57,19 +61,15 @@ function publishTemplate(endPoint, template, files, setBackDropOpen, handleAlert
             return response.json();
         }).then(data  =>{
             data = data['json'] ? JSON.parse(data['json']) : data;
-            console.log(data);
-            setBackDropOpen(false);
-            let closeParent = false;
             let title = "Something went wrong!"
             if('message' in data){
                 if(data['message'].includes("successfully")){
-                    title = "Initiated deployment";
-                    closeParent = true;
-                    triggerBuild(endPoint, hookTillBuildCompletion);
+                    triggerBuild(endPoint, setBackDropOpen, handleAlertOpen);
                 }
-                handleAlertOpen({open: true, closeParent, title, message: data['message']});
+                console.log(data['message']);
             }else{
-                handleAlertOpen({open: true, closeParent, title, message: "Failed to deploy your template, refer logs for details!"});
+                setBackDropOpen(false);
+                handleAlertOpen({open: true, closeParent: false, title, message: "Failed to deploy your template, refer logs for details!"});
             }
         })
         .catch(err => {

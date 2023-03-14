@@ -100,6 +100,11 @@ app.post('/updatetemplate', upload.any(), (req, res) => {
 app.post('/triggerbuild', jsonParser, (req, res) => {
     console.log("Triggering NPM build for templateEP-", req.query['ep']);
     deployBuild(req.query['ep'], clientPath);
+    if(getVar('BUILD_DIR') == 'build'){
+        res.status(200).json({ message: 'Build completed successfully for EP '+req.query['ep']});
+    }else{
+        res.status(400).json({ message: 'Build failed for EP '+req.query['ep']});
+    }
     return;
 });
 

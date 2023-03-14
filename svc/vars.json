@@ -1,21 +1,5 @@
 {
   "BUILD_DIR": "build",
-  "END_POINTS": [
-    "ss",
-    "pnbc",
-    "simarhunar",
-    "o2s",
-    "demo1",
-    "demo2",
-    "demo01",
-    "demo02",
-    "demo03",
-    "demo04"
-  ],
-  "CONFIG_END_POINTS": [
-    "ss",
-    "pnbc",
-    "simarhunar",
-    "o2s"
-  ]
+  "END_POINTS": [],
+  "CONFIG_END_POINTS": []
 }

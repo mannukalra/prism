@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 var fs = require("fs")
 const path = require('path')
 const { getVar, setVar } = require("./varsSvc")
-const { spawn } = require('child_process')
+const { spawnSync } = require('child_process')
 
 
 const clientPath = path.join(__dirname, '../client/');
@@ -72,32 +72,11 @@ function deployBuild(template, clientAbsPath){
 
     let child;
     try{
-        child = spawn('npm run build --prefix '+clientAbsPath, { shell: true, encoding : 'utf8' });
-
-        child.stdout.on('data', function(data) {
-            console.log('Build----- stdout: ' + data);
-        });
-        
-        child.stderr.on("data", (data) => {
-            console.log(`Build----- warning/error: ${data}`);
-        });
-
-        child.on('exit', (code) => {
-            console.log("Build process exited with code >>>>>> "+code);
-        });
-        child.on("close", (code) => {
-            if(code == 0){
-                setVar('BUILD_DIR', 'build');
-            }
-            console.log(`child process closed with code ${code}`);
-        });
+        child = spawnSync('npm run build --prefix '+clientAbsPath, { shell: true, encoding : 'utf8' });
+        // console.log(child.stdout.toString());
     }catch(error){
         console.log('Error', error);
-    }finally{
-        if (fs.existsSync(clientPath+"build/static") ){
-            setVar('BUILD_DIR', 'build');
-        }
-    }  
+    }
 }
 
 
