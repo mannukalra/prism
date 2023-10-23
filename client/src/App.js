@@ -12,7 +12,7 @@ import { isMobile } from "react-device-detect";
 import { Box } from '@mui/system';
 
 const data = Object.assign(main, template);
-const videos = [{title: "Edit template demo", src: "0Kw4ehhaJbg"}, {title: "Template text/json edit deep-dive", src: "0Kw4ehhaJbg"}, {title: "Dummy", src: "2xhQ2xnQwNI"}];
+const videos = [{title: "Prism intro and demo to build your website", src: "bL6yRAqJBYc"}, {title: "Dummy", src: "2xhQ2xnQwNI"}];
 
 function links(data){
   return Object.keys(data).map((item, index) => (

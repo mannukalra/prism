@@ -84,7 +84,7 @@ app.post('/updatetemplate', upload.any(), (req, res) => {
                     endPoints.push(req.query['ep']);
                     setVar('END_POINTS', [...new Set(endPoints)]);
 
-                    res.status(200).json({ message: 'Triggerd deployment successfully, may take around 10 minutes to reflect in the templates list.' });
+                    res.status(200).json({ message: 'Triggerd deployment successfully, may take few minutes to reflect in the templates list.' });
                 } catch (err) {
                     console.log(err);
                     res.status(400).json({ message: 'Failed to deploy site, err- ' + err });
